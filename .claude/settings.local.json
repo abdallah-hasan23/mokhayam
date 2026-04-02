@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/tmp/**)",
+      "Bash(unzip -o \"/c/Users/ZYZOOM/Downloads/mukhayyam-laravel-complete.zip\" -d mukhayyam-new)",
+      "Bash(cp /tmp/mukhayyam-new/mukhayyam/app/Models/User.php /c/laragon/www/mukhayyam/app/Models/User.php)",
+      "Bash(cp /tmp/mukhayyam-new/mukhayyam/bootstrap/app.php /c/laragon/www/mukhayyam/bootstrap/app.php)",
+      "Bash(cp /tmp/mukhayyam-new/mukhayyam/database/migrations/2024_01_01_000001_create_users_table.php /c/laragon/www/mukhayyam/database/migrations/2024_01_01_000001_create_users_table.php)",
+      "Bash(cp /tmp/mukhayyam-new/mukhayyam/database/migrations/_all_migrations_reference.php /c/laragon/www/mukhayyam/database/migrations/_all_migrations_reference.php)",
+      "Bash(php artisan:*)",
+      "Bash(tasklist)",
+      "Read(//c/laragon/bin/mysql//**)",
+      "Read(//c/laragon//**)",
+      "Bash(\"/c/laragon/bin/mysql/mysql-8.4.3-winx64/bin/mysql.exe\" -u root -e \"CREATE DATABASE IF NOT EXISTS mokhayam CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\")",
+      "Bash(curl -s http://localhost:8000)",
+      "Bash(curl -s http://localhost:8000/login)",
+      "Bash(curl -s -c /tmp/cookies.txt -b /tmp/cookies.txt http://localhost:8000/login)",
+      "Bash(curl -s -c /tmp/cookies.txt -b /tmp/cookies.txt http://localhost:8000/dashboard)",
+      "Bash(curl -s http://localhost:8000/about)",
+      "Bash(grep -o 'Illuminate\\\\\\\\[^<]*\\\\|message.*[^<]*')",
+      "Bash(curl -sv http://localhost:8000/about)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8000/search?q=test\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8000/article/hyn-tfkd-alasr-skfha-kyf-yaaad-bnaaa-almaan-tht-khym-oahd\")"
+    ]
+  }
+}
