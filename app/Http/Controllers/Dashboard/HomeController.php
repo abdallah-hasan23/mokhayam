@@ -1,19 +1,23 @@
 <?php
 namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
-use App\Models\{Article,Category,Comment,Subscriber};
+use App\Models\Article;
+use App\Models\ArticleVersion;
+use App\Models\Category;
+use App\Models\ContactMessage;
+use App\Models\User;
 
 class HomeController extends Controller {
     public function index() {
         $stats = [
-            'total_articles'   => Article::count(),
-            'published'        => Article::where('status','published')->count(),
-            'pending_review'   => Article::where('status','review')->count(),
-            'total_views'      => Article::sum('views'),
-            'views_this_month' => Article::whereMonth('updated_at',now()->month)->sum('views'),
-            'total_subs'       => Subscriber::active()->count(),
-            'new_subs'         => Subscriber::active()->thisMonth()->count(),
-            'pending_comments' => Comment::pending()->count(),
+            'total_articles'    => Article::count(),
+            'published'         => Article::where('status','published')->count(),
+            'pending_articles'  => Article::where('status','pending')->count(),
+            'pending_versions'  => ArticleVersion::where('status','pending')->count(),
+            'total_views'       => Article::sum('views'),
+            'views_this_month'  => Article::whereMonth('updated_at',now()->month)->sum('views'),
+            'unread_contact'    => ContactMessage::where('is_read',false)->count(),
+            'active_users'      => User::where('is_active',true)->count(),
         ];
         $chartData = collect(range(29,0))->map(fn($d) => [
             'date'  => now()->subDays($d)->format('d/m'),

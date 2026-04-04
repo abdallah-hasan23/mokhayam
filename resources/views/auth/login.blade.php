@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>تسجيل الدخول — مخيّم</title>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Cairo:wght@400;600;700&family=Tajawal:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 <style>
 body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);overflow:auto}
 .login-wrap{width:100%;max-width:400px;padding:20px}
 .login-logo{text-align:center;margin-bottom:32px}
-.login-logo-mark{width:52px;height:52px;background:var(--gold);display:inline-flex;align-items:center;justify-content:center;font-family:'Amiri',serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:12px}
-.login-logo h1{font-family:'Amiri',serif;font-size:36px;font-weight:700;color:var(--ink)}
+.login-logo-mark{width:52px;height:52px;background:var(--gold);display:inline-flex;align-items:center;justify-content:center;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:12px}
+.login-logo h1{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:36px;font-weight:700;color:var(--ink)}
 .login-logo p{font-family:'Tajawal',sans-serif;font-size:12px;color:var(--faint);margin-top:4px;letter-spacing:.1em}
 .login-card{background:var(--surface);border:1px solid var(--border);padding:32px;box-shadow:0 4px 24px rgba(26,22,20,.08)}
 .login-card h2{font-family:'Cairo',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:24px}

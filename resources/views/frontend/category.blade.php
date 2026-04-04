@@ -58,7 +58,7 @@
             <h3><a href="{{ route('article.show',$art->slug) }}">{{ $art->title }}</a></h3>
             <p>{{ $art->excerpt }}</p>
             <div class="clmeta">
-              <span>{{ $art->user->name }} · {{ $art->published_at?->format('j F Y') }}</span>
+              <span>{{ $art->user->display_name }} · {{ \App\Models\Article::toArabicDate($art->published_at) }}</span>
               <div class="share-row">
                 <a href="https://t.me/share/url?url={{ urlencode(route('article.show',$art->slug)) }}" target="_blank">✈</a>
                 <a href="https://wa.me/?text={{ urlencode($art->title.' '.route('article.show',$art->slug)) }}" target="_blank">💬</a>
@@ -96,13 +96,9 @@
         </div>
       </div>
       <div class="nl-box">
-        <h3>اشترك في النشرة</h3>
-        <p>كل أسبوع، أبرز ما نشرناه في صندوق بريدك.</p>
-        <form action="{{ route('subscribe') }}" method="POST" class="nl-form">
-          @csrf
-          <input type="email" name="email" placeholder="بريدك الإلكتروني" required>
-          <button type="submit">اشترك</button>
-        </form>
+        <h3>تواصل معنا</h3>
+        <p>هل لديك قصة أو ملاحظة؟ نسعد بتواصلك معنا.</p>
+        <a href="{{ route('contact') }}" class="btn-gold" style="display:inline-block;margin-top:12px">راسلنا ←</a>
       </div>
     </aside>
   </div>

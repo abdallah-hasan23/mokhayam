@@ -50,7 +50,7 @@
       <div class="hm-strip-card" onclick="location.href='{{ route('article.show',$art->slug) }}'">
         <a href="{{ route('category.show',$art->category->slug) }}" class="badge dark" onclick="event.stopPropagation()">{{ $art->category->name }}</a>
         <h4>{{ $art->title }}</h4>
-        <div class="meta-sm">{{ $art->user->name }} · {{ $art->published_at?->diffForHumans() }}</div>
+        <div class="meta-sm">{{ $art->user->display_name }} · {{ \App\Models\Article::toArabicDate($art->published_at) }}</div>
       </div>
       @endforeach
     </div>
@@ -81,7 +81,7 @@
       <h3><a href="{{ route('article.show',$art->slug) }}">{{ $art->title }}</a></h3>
       <p>{{ $art->excerpt }}</p>
       <div class="card-foot">
-        <span>{{ $art->user->name }} · {{ $art->published_at?->format('d M') }}</span>
+        <span>{{ $art->user->display_name }} · {{ \App\Models\Article::toArabicDate($art->published_at) }}</span>
         <div class="share-row">
           <a href="https://t.me/share/url?url={{ urlencode(route('article.show',$art->slug)) }}" target="_blank" title="تيليغرام">✈</a>
           <a href="https://wa.me/?text={{ urlencode($art->title.' '.route('article.show',$art->slug)) }}" target="_blank" title="واتساب">💬</a>
@@ -119,7 +119,7 @@
           <a href="{{ route('category.show',$art->category->slug) }}" class="badge dark">{{ $art->category->name }}</a>
           <h3><a href="{{ route('article.show',$art->slug) }}">{{ $art->title }}</a></h3>
           <p>{{ $art->excerpt }}</p>
-          <div class="lmeta">{{ $art->user->name }} · {{ $art->published_at?->format('d F Y') }}</div>
+          <div class="lmeta">{{ $art->user->display_name }} · {{ \App\Models\Article::toArabicDate($art->published_at) }}</div>
         </div>
         <div class="list-thumb-sm">
           <a href="{{ route('article.show',$art->slug) }}">
@@ -137,6 +137,29 @@
 
   {{-- SIDEBAR --}}
   <aside class="sidebar-aside">
+    {{-- Most Read widget --}}
+    @if($mostRead->count())
+    <div class="widget">
+      <h3>الأكثر قراءة</h3>
+      <ol class="most-read-list">
+        @foreach($mostRead as $i => $art)
+        <li class="most-read-item">
+          <span class="mr-rank {{ $i===0 ? 'mr-rank-1' : '' }}">{{ $i+1 }}</span>
+          <div class="mr-info">
+            <a href="{{ route('article.show',$art->slug) }}" class="mr-title">{{ $art->title }}</a>
+            <div class="mr-meta">
+              {{ $art->category->name }}
+              @if($art->views > 0)
+                · <span class="mr-views">{{ number_format($art->views) }} مشاهدة</span>
+              @endif
+            </div>
+          </div>
+        </li>
+        @endforeach
+      </ol>
+    </div>
+    @endif
+
     <div class="widget">
       <h3>تصفّح بالموضوع</h3>
       <div class="tags-cloud">
@@ -149,13 +172,9 @@
     </div>
 
     <div class="nl-box">
-      <h3>اشترك في النشرة</h3>
-      <p>قصص لا تقرأها في مكان آخر، كل أسبوع في صندوق بريدك.</p>
-      <form action="{{ route('subscribe') }}" method="POST" class="nl-form">
-        @csrf
-        <input type="email" name="email" placeholder="بريدك الإلكتروني" required>
-        <button type="submit">اشترك الآن</button>
-      </form>
+      <h3>تواصل معنا</h3>
+      <p>هل لديك قصة تستحق أن تُروى؟ أو رأي تودّ مشاركتنا إياه؟</p>
+      <a href="{{ route('contact') }}" class="btn-gold" style="display:inline-block;margin-top:12px">راسلنا الآن ←</a>
     </div>
   </aside>
 </div>

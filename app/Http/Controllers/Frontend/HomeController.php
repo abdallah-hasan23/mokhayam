@@ -11,6 +11,7 @@ class HomeController extends Controller {
         $featuredCat     = Category::orderBy('order')->skip(1)->first();
         $featuredArticles= $featuredCat ? Article::with(['user','category'])->published()->where('category_id',$featuredCat->id)->latest('published_at')->limit(3)->get() : collect();
         $categories      = Category::withCount('publishedArticles')->orderBy('order')->get();
-        return view('frontend.home', compact('heroArticles','latestArticles','longRead','featuredArticles','featuredCat','categories'));
+        $mostRead        = Article::with(['user','category'])->published()->orderByDesc('views')->limit(5)->get();
+        return view('frontend.home', compact('heroArticles','latestArticles','longRead','featuredArticles','featuredCat','categories','mostRead'));
     }
 }

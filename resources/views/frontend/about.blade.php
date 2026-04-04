@@ -25,9 +25,9 @@
     @foreach(\App\Models\User::where('is_active',true)->orderBy('role')->get() as $user)
     <div class="team-card">
       <div class="team-avatar">
-        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=b8902a&color=fff&size=90" alt="{{ $user->name }}">
+        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->display_name) }}&background=b8902a&color=fff&size=90" alt="{{ $user->display_name }}">
       </div>
-      <h4>{{ $user->name }}</h4>
+      <h4>{{ $user->display_name }}</h4>
       <span>{{ $user->job_title ?: $user->role_label }}</span>
     </div>
     @endforeach

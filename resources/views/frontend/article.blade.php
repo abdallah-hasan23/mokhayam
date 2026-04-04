@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('title', $article->meta_title ?: $article->title)
 @section('description', $article->meta_description ?: $article->excerpt)
-
 @section('content')
 
 {{-- HERO IMAGE --}}
@@ -20,11 +19,15 @@
   {{-- META --}}
   <div class="article-meta-top">
     <div class="art-author-avatar">
-      <img src="{{ $article->user->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode($article->user->name).'&background=b8902a&color=fff' }}" alt="{{ $article->user->name }}">
+      @if($article->user->show_avatar && $article->user->avatar)
+        <img src="{{ asset('storage/'.$article->user->avatar) }}" alt="{{ $article->user->display_name }}">
+      @else
+        <div class="author-avatar-placeholder">{{ $article->user->avatar_initial }}</div>
+      @endif
     </div>
     <div class="art-author-info">
-      <div class="name">{{ $article->user->name }}</div>
-      <div class="date">{{ $article->published_at?->format('j F Y') }} · {{ $article->reading_time }}</div>
+      <div class="name">{{ $article->user->display_name }}</div>
+      <div class="date">{{ \App\Models\Article::toArabicDate($article->published_at) }} · {{ $article->reading_time }}</div>
     </div>
     <a href="{{ route('category.show',$article->category->slug) }}" class="badge">{{ $article->category->name }}</a>
     <div class="art-share-top">
@@ -47,16 +50,6 @@
     {!! $article->content !!}
   </div>
 
-  {{-- TAGS --}}
-  @if($article->tags->count())
-  <div class="article-tags">
-    <span>الوسوم:</span>
-    @foreach($article->tags as $tag)
-    <span class="tag-pill">{{ $tag->name }}</span>
-    @endforeach
-  </div>
-  @endif
-
   {{-- SHARE --}}
   <div style="display:flex;align-items:center;gap:12px;padding:28px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:32px 0">
     <span style="font-family:'Tajawal',sans-serif;font-size:13px;color:var(--muted)">شارك المقال:</span>
@@ -66,63 +59,22 @@
   </div>
 
   {{-- AUTHOR BOX --}}
-  @if($article->user->bio)
+  @if($article->user->bio && $article->user->show_name)
   <div class="author-box">
     <div class="author-box-avatar">
-      <img src="{{ $article->user->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode($article->user->name).'&background=b8902a&color=fff' }}" alt="{{ $article->user->name }}">
+      @if($article->user->show_avatar && $article->user->avatar)
+        <img src="{{ asset('storage/'.$article->user->avatar) }}" alt="{{ $article->user->display_name }}">
+      @else
+        <div style="width:60px;height:60px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-family:'Cairo',sans-serif;font-size:22px;font-weight:700;color:var(--muted)">{{ $article->user->avatar_initial }}</div>
+      @endif
     </div>
     <div class="author-box-info">
-      <h4>{{ $article->user->name }}</h4>
+      <h4>{{ $article->user->display_name }}</h4>
+      @if($article->user->job_title)<p style="font-size:13px;color:var(--faint)">{{ $article->user->job_title }}</p>@endif
       <p>{{ $article->user->bio }}</p>
     </div>
   </div>
   @endif
-
-  {{-- COMMENTS --}}
-  <div style="margin-top:48px">
-    <div class="sec-head" style="margin-bottom:24px">
-      <h2>التعليقات ({{ $article->approvedComments->count() }})</h2>
-      <div class="line"></div>
-    </div>
-
-    @if(session('comment_sent'))
-    <div class="alert alert-success" style="margin-bottom:20px">{{ session('comment_sent') }}</div>
-    @endif
-
-    {{-- Comment list --}}
-    @foreach($article->approvedComments as $comment)
-    <div style="padding:16px 0;border-bottom:1px solid var(--border)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-        <div style="width:36px;height:36px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;color:var(--muted)">
-          {{ mb_substr($comment->author_name,0,1) }}
-        </div>
-        <div>
-          <div style="font-family:'Cairo',sans-serif;font-size:13px;font-weight:700">{{ $comment->author_name }}</div>
-          <div style="font-family:'Tajawal',sans-serif;font-size:11px;color:var(--faint)">{{ $comment->created_at->diffForHumans() }}</div>
-        </div>
-      </div>
-      <p style="font-family:'Tajawal',sans-serif;font-size:14px;color:var(--muted);line-height:1.8;border-right:2px solid var(--border);padding-right:12px">{{ $comment->body }}</p>
-    </div>
-    @endforeach
-
-    {{-- Comment form --}}
-    <div style="margin-top:36px">
-      <h3 style="font-family:'Amiri',serif;font-size:22px;font-weight:700;margin-bottom:20px">أضف تعليقاً</h3>
-      <form action="{{ route('article.comment',$article->slug) }}" method="POST">
-        @csrf
-        <div class="form-row" style="margin-bottom:14px">
-          <div><label class="form-label">الاسم</label><input name="author_name" class="form-control" value="{{ old('author_name') }}" required></div>
-          <div><label class="form-label">البريد الإلكتروني</label><input name="author_email" type="email" class="form-control" value="{{ old('author_email') }}" required></div>
-        </div>
-        <div style="margin-bottom:16px">
-          <label class="form-label">التعليق</label>
-          <textarea name="body" class="form-control" style="min-height:120px" required minlength="10" maxlength="1000">{{ old('body') }}</textarea>
-        </div>
-        <button type="submit" class="btn btn-gold">إرسال التعليق ←</button>
-        <div style="font-family:'Tajawal',sans-serif;font-size:11px;color:var(--faint);margin-top:8px">سيظهر تعليقك بعد المراجعة</div>
-      </form>
-    </div>
-  </div>
 
 </div>{{-- /article-wrap --}}
 
@@ -147,7 +99,7 @@
         <a href="{{ route('category.show',$art->category->slug) }}" class="badge dark">{{ $art->category->name }}</a>
         <h3><a href="{{ route('article.show',$art->slug) }}">{{ $art->title }}</a></h3>
         <p>{{ $art->excerpt }}</p>
-        <div class="card-foot"><span>{{ $art->user->name }} · {{ $art->published_at?->format('d F') }}</span></div>
+        <div class="card-foot"><span>{{ $art->user->display_name }} · {{ \App\Models\Article::toArabicDate($art->published_at) }}</span></div>
       </div>
     </article>
     @endforeach

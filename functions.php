@@ -39,7 +39,7 @@ function mukhayyam_scripts() {
     // Google Fonts (Arabic)
     wp_enqueue_style(
         'mukhayyam-fonts',
-        'https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap',
+        'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap',
         [],
         null
     );

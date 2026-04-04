@@ -4,7 +4,7 @@
 @section('content')
 <div class="wrap" style="padding-top:40px;padding-bottom:80px">
   <div class="pg-head" style="margin-bottom:28px">
-    <div><h1 style="font-family:'Amiri',serif;font-size:30px;font-weight:700">{{ $q ? 'نتائج البحث عن: «'.$q.'»' : 'البحث' }}</h1></div>
+    <div><h1 style="font-family:'IBM Plex Sans Arabic',sans-serif;font-size:30px;font-weight:700">{{ $q ? 'نتائج البحث عن: «'.$q.'»' : 'البحث' }}</h1></div>
   </div>
   <form action="{{ route('search') }}" method="GET" style="margin-bottom:32px">
     <div class="tb-search" style="width:100%;max-width:500px">

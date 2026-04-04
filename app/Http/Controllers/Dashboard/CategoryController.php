@@ -12,12 +12,18 @@ class CategoryController extends Controller {
     }
     public function store(Request $request) {
         $request->validate(['name'=>'required|string|max:100']);
-        Category::create($request->only(['name','description','color','order']));
+        Category::create([
+            ...$request->only(['name','description','color','order']),
+            'show_in_nav' => $request->boolean('show_in_nav', true),
+        ]);
         return redirect()->route('dashboard.categories.index')->with('success','تم إنشاء القسم');
     }
     public function update(Request $request, Category $category) {
         $request->validate(['name'=>'required|string|max:100']);
-        $category->update($request->only(['name','description','color','order']));
+        $category->update([
+            ...$request->only(['name','description','color','order']),
+            'show_in_nav' => $request->boolean('show_in_nav', false),
+        ]);
         return redirect()->route('dashboard.categories.index')->with('success','تم التحديث');
     }
     public function destroy(Category $category) {

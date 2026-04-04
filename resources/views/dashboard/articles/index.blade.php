@@ -1,80 +1,113 @@
 @extends('layouts.dashboard')
-@section('title','المقالات') @section('page-title','إدارة المقالات') @section('breadcrumb','المقالات')
+@section('title','المقالات')
+@section('page-title','المقالات')
 @section('content')
 <div class="pg-head">
-  <div class="pg-head-left"><h1>إدارة المقالات</h1><p>{{ $counts['all'] }} مقال · {{ $counts['review'] }} بانتظار المراجعة</p></div>
-  <div class="pg-actions"><a href="{{ route('dashboard.articles.create') }}" class="btn btn-gold">✦ مقال جديد</a></div>
+  <div class="pg-head-left">
+    <h1>المقالات</h1>
+    <p>{{ $counts['all'] }} مقال إجمالاً</p>
+  </div>
+  <a href="{{ route('dashboard.articles.create') }}" class="btn btn-gold">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    مقال جديد
+  </a>
 </div>
 
-<div class="filter-row">
-  @foreach(['all'=>'الكل ('.$counts['all'].')','published'=>'منشور ('.$counts['published'].')','draft'=>'مسودة ('.$counts['draft'].')','review'=>'مراجعة ('.$counts['review'].')','rejected'=>'مرفوض ('.$counts['rejected'].')'] as $val=>$label)
-  <a href="{{ route('dashboard.articles.index', array_merge(request()->query(),['status'=>$val])) }}" class="ftab {{ request('status','all')===$val?'on':'' }}">{{ $label }}</a>
-  @endforeach
-  <div class="f-spacer"></div>
-  <form method="GET" action="{{ route('dashboard.articles.index') }}" class="f-search">
-    <span style="color:var(--faint)">⌕</span>
-    <input type="text" name="search" value="{{ request('search') }}" placeholder="ابحث...">
+<!-- Search & Filters -->
+<div class="filters-bar">
+  <div class="filter-tabs">
+    @foreach(['all'=>'الكل','draft'=>'مسودة','pending'=>'بانتظار الموافقة','published'=>'منشور','rejected'=>'مرفوض'] as $status=>$label)
+    <a href="{{ route('dashboard.articles.index', array_merge(request()->except('page'), ['status'=>$status])) }}"
+       class="filter-tab {{ (request('status', 'all') === $status) ? 'active' : '' }}">
+      {{ $label }}
+      <span class="filter-count">{{ $counts[$status] }}</span>
+    </a>
+    @endforeach
+  </div>
+  <form method="GET" action="{{ route('dashboard.articles.index') }}" class="filter-search">
+    <input type="text" name="q" value="{{ request('q') }}" placeholder="بحث بالعنوان أو المحتوى أو الكاتب...">
     @if(request('status'))<input type="hidden" name="status" value="{{ request('status') }}">@endif
+    <button type="submit" class="btn-search">⌕</button>
   </form>
 </div>
 
-<div class="card">
-  <table class="tbl">
-    <thead><tr><th>المقال</th><th>القسم</th><th>الكاتب</th><th>الحالة</th><th>المشاهدات</th><th>التاريخ</th><th></th></tr></thead>
+<!-- Articles Table -->
+<div class="table-wrap">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>العنوان</th>
+        <th>الكاتب</th>
+        <th>التصنيف</th>
+        <th>الحالة</th>
+        <th>التاريخ</th>
+        <th>الإجراءات</th>
+      </tr>
+    </thead>
     <tbody>
       @forelse($articles as $article)
       <tr>
         <td>
-          <div style="display:flex;align-items:center;gap:10px">
-            <div class="thumb-xs">
-              @if($article->featured_image)<img src="{{ $article->featured_image_url }}" style="width:100%;height:100%;object-fit:cover">@else ◧ @endif
-            </div>
-            <div><div class="tbl-title">{{ $article->title }}</div><div class="tbl-sub">{{ $article->updated_at->diffForHumans() }}</div></div>
-          </div>
+          <strong style="font-size:15px">{{ Str::limit($article->title,60) }}</strong>
+          @if($article->status === 'published')
+            <a href="{{ route('article.show',$article->slug) }}" target="_blank" style="font-size:11px;color:var(--gold);margin-right:6px">↗ عرض</a>
+          @endif
+          @php $hasPendingVersion = $article->pendingVersion !== null; @endphp
+          @if($hasPendingVersion)
+            <span class="pill pill-blue" style="font-size:11px">نسخة معلقة</span>
+          @endif
         </td>
-        <td><span class="cat-tag" style="color:var(--gold);border-color:var(--gold-bdr)">{{ $article->category->name }}</span></td>
-        <td>{{ $article->user->name }}</td>
+        <td style="font-size:13px">{{ $article->user->name }}</td>
+        <td><span class="badge">{{ $article->category->name }}</span></td>
         <td><span class="pill {{ $article->status_class }}">{{ $article->status_label }}</span></td>
-        <td style="font-weight:700;color:{{ $article->views>0?'var(--gold)':'var(--faint)' }}">{{ $article->views>0?number_format($article->views):'—' }}</td>
-        <td>{{ $article->created_at->format('d/m/Y') }}</td>
+        <td style="font-size:12px;direction:rtl">
+          {{ \App\Models\Article::toArabicDate($article->published_at ?? $article->created_at) }}
+        </td>
         <td>
-          <div class="row-actions">
-            <a href="{{ route('dashboard.articles.edit',$article) }}" class="btn btn-outline btn-sm">تعديل</a>
-            @if($article->status==='published')
-            <a href="{{ route('article.show',$article->slug) }}" target="_blank" class="btn btn-ghost btn-sm">معاينة</a>
-            @endif
-            @if($article->status==='review' && auth()->user()->isEditor())
-            <button class="btn btn-success btn-sm" onclick="quickAction('{{ route('dashboard.articles.publish',$article) }}','هل تنشر هذا المقال؟',this)">نشر</button>
-            <button class="btn btn-danger btn-sm" onclick="quickAction('{{ route('dashboard.articles.reject',$article) }}','هل ترفض هذا المقال؟',this)">رفض</button>
-            @endif
-            @if(auth()->user()->isAdmin() || $article->user_id===auth()->id())
-            <form action="{{ route('dashboard.articles.destroy',$article) }}" method="POST" style="display:inline" onsubmit="return confirm('هل تريد حذف هذا المقال نهائياً؟')">
-              @csrf @method('DELETE')
-              <button type="submit" class="btn btn-danger btn-sm">حذف</button>
-            </form>
+          <div class="action-btns">
+            @if(auth()->user()->isAdmin())
+              {{-- Admin: always can edit --}}
+              <a href="{{ route('dashboard.articles.edit',$article) }}" class="btn-sm btn-edit">تعديل</a>
+
+              @if($article->status === 'pending')
+                <form method="POST" action="{{ route('dashboard.articles.publish',$article) }}" style="display:inline">
+                  @csrf @method('PATCH')
+                  <button type="submit" class="btn-sm btn-publish">نشر</button>
+                </form>
+                <form method="POST" action="{{ route('dashboard.articles.reject',$article) }}" style="display:inline">
+                  @csrf @method('PATCH')
+                  <button type="submit" class="btn-sm btn-reject">رفض</button>
+                </form>
+              @endif
+
+              @if($hasPendingVersion)
+                <a href="{{ route('dashboard.articles.versions',$article) }}" class="btn-sm btn-versions">النسخ ({{ $article->versions()->where('status','pending')->count() }})</a>
+              @endif
+
+              <form method="POST" action="{{ route('dashboard.articles.destroy',$article) }}" style="display:inline" onsubmit="return confirm('حذف المقال نهائياً؟')">
+                @csrf @method('DELETE')
+                <button type="submit" class="btn-sm btn-delete">حذف</button>
+              </form>
+            @else
+              {{-- Non-admin --}}
+              @if($article->status === 'pending')
+                <button class="btn-sm btn-disabled" disabled title="بانتظار موافقة الإدارة">🔒 معلق</button>
+                <span style="font-size:11px;color:#888">بانتظار الموافقة</span>
+              @elseif($article->status === 'published')
+                <a href="{{ route('dashboard.articles.version.create',$article) }}" class="btn-sm btn-edit">تعديل نسخة جديدة</a>
+              @elseif(in_array($article->status, ['draft','rejected']))
+                <a href="{{ route('dashboard.articles.edit',$article) }}" class="btn-sm btn-edit">تعديل</a>
+              @endif
             @endif
           </div>
         </td>
       </tr>
       @empty
-      <tr><td colspan="7"><div class="empty"><div class="empty-icon">◧</div><div class="empty-text">لا توجد مقالات</div></div></td></tr>
+      <tr><td colspan="6" class="empty-row">لا توجد مقالات</td></tr>
       @endforelse
     </tbody>
   </table>
-  @if($articles->hasPages())
-  <div style="padding:16px 0 4px;border-top:1px solid var(--border)">
-    {{ $articles->withQueryString()->links() }}
-  </div>
-  @endif
 </div>
+
+<div style="margin-top:20px">{{ $articles->withQueryString()->links() }}</div>
 @endsection
-@push('scripts')
-<script>
-function quickAction(url,msg,btn){
-  if(!confirm(msg))return;
-  btn.disabled=true;
-  fetch(url,{method:'PATCH',headers:{'X-CSRF-TOKEN':document.querySelector('meta[name=csrf-token]').content}})
-  .then(()=>location.reload());
-}
-</script>
-@endpush

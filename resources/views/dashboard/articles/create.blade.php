@@ -1,98 +1,182 @@
 @extends('layouts.dashboard')
-@section('title','مقال جديد') @section('page-title','مقال جديد') @section('breadcrumb','مقالات / جديد')
+@section('title','مقال جديد')
+@section('page-title','مقال جديد')
+
+@push('styles')
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<style>
+.ql-toolbar.ql-snow { border: 1px solid var(--border); border-bottom: none; background: var(--bg); font-family: 'Cairo', sans-serif; border-radius: 0; }
+.ql-container.ql-snow { border: 1px solid var(--border); font-family: 'Tajawal', sans-serif; font-size: 15px; min-height: 400px; direction: rtl; }
+.ql-editor { min-height: 400px; line-height: 1.9; color: var(--ink); padding: 16px 20px; }
+.ql-editor.ql-blank::before { color: var(--faint); font-style: normal; right: 20px; left: auto; }
+.ql-snow .ql-stroke { stroke: var(--muted); }
+.ql-snow .ql-fill { fill: var(--muted); }
+.ql-snow.ql-toolbar button:hover .ql-stroke, .ql-snow.ql-toolbar button.ql-active .ql-stroke { stroke: var(--gold); }
+.ql-snow.ql-toolbar button:hover .ql-fill, .ql-snow.ql-toolbar button.ql-active .ql-fill { fill: var(--gold); }
+.ql-snow.ql-toolbar .ql-picker-label:hover, .ql-snow.ql-toolbar .ql-picker-label.ql-active { color: var(--gold); }
+</style>
+@endpush
+
 @section('content')
 <div class="pg-head">
-  <div class="pg-head-left"><h1>مقال جديد</h1></div>
-  <div class="pg-actions">
-    <button type="button" onclick="document.getElementById('article-form').querySelector('[name=status]').value='draft';document.getElementById('article-form').submit()" class="btn btn-outline">حفظ مسودة</button>
-    <button type="button" onclick="document.getElementById('article-form').querySelector('[name=status]').value='published';document.getElementById('article-form').submit()" class="btn btn-gold">نشر المقال ←</button>
-  </div>
+  <div class="pg-head-left"><h1>مقال جديد</h1><p>سيُرسَل للمراجعة قبل النشر</p></div>
+  <a href="{{ route('dashboard.articles.index') }}" class="btn btn-outline">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    رجوع
+  </a>
 </div>
 
-<form id="article-form" action="{{ route('dashboard.articles.store') }}" method="POST" enctype="multipart/form-data">
+<form method="POST" action="{{ route('dashboard.articles.store') }}" enctype="multipart/form-data" id="articleForm">
   @csrf
-  <input type="hidden" name="status" value="draft">
-  <div class="g-ed">
-    <div>
-      <div class="card mb16">
-        <div class="form-group" style="margin-bottom:12px">
-          <input name="title" class="form-control" style="font-size:20px;font-family:'Amiri',serif;padding:12px 14px" placeholder="عنوان المقال..." value="{{ old('title') }}" required>
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <textarea name="excerpt" class="form-control" style="min-height:60px;font-size:15px" placeholder="المقدمة (جملة تشد القارئ)...">{{ old('excerpt') }}</textarea>
+  <div class="article-editor-wrap">
+
+    {{-- ── MAIN COLUMN ── --}}
+    <div class="editor-main">
+      {{-- Title --}}
+      <div class="editor-box" style="padding:0">
+        <input name="title" class="editor-title-input" placeholder="عنوان المقال..." value="{{ old('title') }}" required>
+      </div>
+
+      {{-- Excerpt --}}
+      <div class="editor-box">
+        <div class="editor-box-head"><h3>مقتطف</h3></div>
+        <div style="padding:14px">
+          <textarea name="excerpt" class="form-control" rows="2" placeholder="ملخص قصير يظهر في قوائم المقالات...">{{ old('excerpt') }}</textarea>
         </div>
       </div>
-      <div class="editor-toolbar">
-        <span class="toolbar-btn" style="font-weight:700">B</span>
-        <span class="toolbar-btn" style="font-style:italic">I</span>
-        <span class="toolbar-btn">H2</span><span class="toolbar-btn">H3</span>
-        <div class="toolbar-sep"></div>
-        <span class="toolbar-btn">« »</span>
-        <span class="toolbar-btn">—</span>
+
+      {{-- Rich Text Content --}}
+      <div class="editor-box" style="padding:0">
+        <div class="editor-box-head" style="padding:12px 18px;border-bottom:1px solid var(--border)"><h3>المحتوى</h3></div>
+        <div id="quillEditor">{!! old('content') !!}</div>
+        <textarea name="content" id="contentTextarea" style="display:none" required>{{ old('content') }}</textarea>
       </div>
-      <textarea name="content" class="form-control" style="border-top:none;min-height:380px;font-size:16px;line-height:2;font-family:'Tajawal',sans-serif;padding:20px" placeholder="ابدأ الكتابة هنا..." required>{{ old('content') }}</textarea>
+
+      @if($errors->any())
+      <div class="alert alert-error">{{ $errors->first() }}</div>
+      @endif
     </div>
-    <div style="display:flex;flex-direction:column;gap:14px">
-      <div class="card">
-        <div class="card-title" style="margin-bottom:16px"><div class="ct-line"></div>إعدادات النشر</div>
-        <div class="form-group">
-          <label class="form-label">القسم</label>
+
+    {{-- ── SIDEBAR COLUMN ── --}}
+    <div class="editor-sidebar">
+
+      {{-- Publish --}}
+      <div class="editor-box">
+        <div class="editor-box-head"><h3>النشر</h3></div>
+        <div style="padding:14px">
+          @if(auth()->user()->isAdmin())
+          <div class="form-group" style="margin-bottom:12px">
+            <label class="form-label">الحالة</label>
+            <select name="status" class="form-control form-control-sm">
+              <option value="pending">إرسال للموافقة</option>
+              <option value="published">نشر مباشرة</option>
+              <option value="draft">حفظ كمسودة</option>
+            </select>
+          </div>
+          @else
+          <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:4px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            سيُرسَل للمراجعة قبل النشر
+          </div>
+          @endif
+          <button type="submit" class="btn btn-gold" style="width:100%;margin-top:8px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            إرسال للموافقة
+          </button>
+          <a href="{{ route('dashboard.articles.index') }}" class="btn btn-outline" style="width:100%;text-align:center;margin-top:8px;display:flex;justify-content:center">إلغاء</a>
+        </div>
+      </div>
+
+      {{-- Category --}}
+      <div class="editor-box">
+        <div class="editor-box-head"><h3>التصنيف</h3></div>
+        <div style="padding:14px">
           <select name="category_id" class="form-control" required>
-            <option value="">اختر قسماً...</option>
+            <option value="">اختر تصنيفاً...</option>
             @foreach($categories as $cat)
-            <option value="{{ $cat->id }}" {{ old('category_id')==$cat->id?'selected':'' }}>{{ $cat->name }}</option>
+              <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
             @endforeach
           </select>
         </div>
-        <div class="form-group">
-          <label class="form-label">الكاتب</label>
-          <select name="user_id" class="form-control" required>
-            @foreach($writers as $w)
-            <option value="{{ $w->id }}" {{ old('user_id',auth()->id())==$w->id?'selected':'' }}>{{ $w->name }}</option>
+      </div>
+
+      @if(auth()->user()->isAdmin())
+      {{-- Author --}}
+      <div class="editor-box">
+        <div class="editor-box-head"><h3>الكاتب</h3></div>
+        <div style="padding:14px">
+          <select name="user_id" class="form-control">
+            @foreach($writers as $writer)
+              <option value="{{ $writer->id }}" {{ old('user_id', auth()->id()) == $writer->id ? 'selected' : '' }}>{{ $writer->name }}</option>
             @endforeach
           </select>
         </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">الوسوم</label>
-          <input name="tags" class="form-control" placeholder="نزوح، أسرة، حرب..." value="{{ old('tags') }}">
-          <div class="form-hint">افصل بين الوسوم بفاصلة</div>
+      </div>
+      @endif
+
+      {{-- Featured Image --}}
+      <div class="editor-box">
+        <div class="editor-box-head"><h3>صورة المقال</h3></div>
+        <div style="padding:14px">
+          <label class="upload-zone" for="imgInput">
+            <div class="upload-icon">🖼</div>
+            <div class="upload-text">اضغط لاختيار صورة</div>
+            <div class="upload-hint">JPG, PNG, WebP — حجم أقصى 3MB</div>
+          </label>
+          <input type="file" name="featured_image" accept="image/*" id="imgInput" style="display:none" onchange="previewImg(this)">
+          <img id="imgPreview" style="display:none;width:100%;margin-top:10px;border-radius:4px;border:1px solid var(--border)">
         </div>
       </div>
-      <div class="card">
-        <div class="card-title" style="margin-bottom:14px"><div class="ct-line"></div>الصورة الرئيسية</div>
-        <label class="upload-zone" for="featured_image">
-          <div class="upload-icon">📷</div>
-          <div class="upload-text">اضغط لرفع صورة</div>
-          <div class="upload-hint">JPG أو PNG — بحد أقصى ٥MB</div>
-        </label>
-        <input type="file" id="featured_image" name="featured_image" accept="image/*" style="display:none" onchange="previewImage(this)">
-        <div id="img-preview" style="margin-top:8px;display:none"><img id="preview-img" style="width:100%;height:140px;object-fit:cover"></div>
-      </div>
-      <div class="card">
-        <div class="card-title" style="margin-bottom:14px"><div class="ct-line"></div>SEO</div>
-        <div class="form-group">
-          <label class="form-label">العنوان الوصفي</label>
-          <input name="meta_title" class="form-control" placeholder="Meta Title..." value="{{ old('meta_title') }}" maxlength="60">
-          <div class="form-hint">{{ strlen(old('meta_title','')) }} / 60</div>
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">الوصف</label>
-          <textarea name="meta_description" class="form-control" style="min-height:70px" placeholder="Meta Description..." maxlength="155">{{ old('meta_description') }}</textarea>
-          <div class="form-hint">{{ strlen(old('meta_description','')) }} / 155</div>
+
+      {{-- SEO --}}
+      <div class="editor-box">
+        <div class="editor-box-head"><h3>إعدادات SEO</h3></div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:8px">
+          <input name="meta_title" class="form-control form-control-sm" placeholder="عنوان SEO..." value="{{ old('meta_title') }}">
+          <textarea name="meta_description" class="form-control form-control-sm" rows="3" placeholder="وصف SEO...">{{ old('meta_description') }}</textarea>
         </div>
       </div>
+
     </div>
   </div>
 </form>
 @endsection
+
 @push('scripts')
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 <script>
-function previewImage(input){
-  if(input.files&&input.files[0]){
-    const reader=new FileReader();
-    reader.onload=e=>{
-      document.getElementById('preview-img').src=e.target.result;
-      document.getElementById('img-preview').style.display='block';
+// Init Quill
+const quill = new Quill('#quillEditor', {
+  theme: 'snow',
+  direction: 'rtl',
+  placeholder: 'اكتب محتوى المقال هنا...',
+  modules: {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['blockquote', 'code-block'],
+      ['link'],
+      [{ align: [] }],
+      ['clean']
+    ]
+  }
+});
+
+// On form submit, sync Quill content to hidden textarea
+document.getElementById('articleForm').addEventListener('submit', function() {
+  document.getElementById('contentTextarea').value = quill.root.innerHTML;
+});
+
+// Image preview
+function previewImg(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.getElementById('imgPreview');
+      img.src = e.target.result;
+      img.style.display = 'block';
+      document.querySelector('.upload-zone').style.display = 'none';
     };
     reader.readAsDataURL(input.files[0]);
   }

@@ -4,7 +4,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Category extends Model {
-    protected $fillable = ['name','slug','description','color','order'];
+    protected $fillable = ['name','slug','description','color','order','show_in_nav'];
+    protected $casts    = ['show_in_nav' => 'boolean'];
+
     protected static function boot() {
         parent::boot();
         static::creating(fn($c) => $c->slug = $c->slug ?: Str::slug($c->name));

@@ -16,15 +16,15 @@
 </div>
 
 <div class="stat-grid">
-  <div class="stat-card sc-gold"><div class="sc-label">إجمالي المشاهدات</div><div class="sc-value">{{ number_format($stats['total_views']) }}</div><div class="sc-delta up">↑ {{ number_format($stats['period_views']) }} هذه الفترة</div></div>
-  <div class="stat-card sc-green"><div class="sc-label">المشتركون</div><div class="sc-value">{{ number_format($stats['total_subs']) }}</div><div class="sc-delta up">↑ نشطون</div></div>
-  <div class="stat-card sc-blue"><div class="sc-label">معدل فتح النشرة</div><div class="sc-value">{{ $stats['open_rate'] }}</div><div class="sc-delta up">↑ فوق المتوسط</div></div>
-  <div class="stat-card sc-red"><div class="sc-label">إجمالي المقالات</div><div class="sc-value">{{ \App\Models\Article::published()->count() }}</div><div class="sc-delta neutral">مقال منشور</div></div>
+  <div class="stat-card sc-gold"><div class="sc-label">إجمالي المشاهدات</div><div class="sc-value">{{ number_format($stats['total_views']) }}</div><div class="sc-delta up">مشاهدة لجميع المقالات</div></div>
+  <div class="stat-card sc-green"><div class="sc-label">إجمالي المقالات المنشورة</div><div class="sc-value">{{ number_format($stats['total_articles']) }}</div><div class="sc-delta up">مقال منشور</div></div>
+  <div class="stat-card sc-blue"><div class="sc-label">مقالات هذه الفترة</div><div class="sc-value">{{ number_format($stats['period_articles']) }}</div><div class="sc-delta up">نُشر في آخر {{ $period === 'week' ? 'أسبوع' : ($period === 'year' ? 'سنة' : 'شهر') }}</div></div>
+  <div class="stat-card sc-red"><div class="sc-label">بانتظار الموافقة</div><div class="sc-value">{{ number_format($stats['pending_count']) }}</div><div class="sc-delta neutral">مقال قيد المراجعة</div></div>
 </div>
 
 <div class="g2">
   <div class="card">
-    <div class="card-head"><div class="card-title"><div class="ct-line"></div>الزيارات اليومية</div></div>
+    <div class="card-head"><div class="card-title"><div class="ct-line"></div>المقالات المنشورة يومياً</div></div>
     <div class="bar-chart" style="height:100px">
       @php $maxV = $chartData->max('views') ?: 1 @endphp
       @foreach($chartData as $day)
