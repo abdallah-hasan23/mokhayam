@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
+use App\Models\User;
+use App\Notifications\NewContactMessage;
 use Illuminate\Http\Request;
 
 class ContactController extends Controller
@@ -20,7 +22,12 @@ class ContactController extends Controller
             'message' => 'required|string|min:10|max:2000',
         ]);
 
-        ContactMessage::create($request->only('name','email','message'));
+        $contact = ContactMessage::create($request->only('name','email','message'));
+
+        // Notify all active admins
+        User::where('role','admin')->where('is_active',true)->each(
+            fn($admin) => $admin->notify(new NewContactMessage($contact))
+        );
 
         return back()->with('success', 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
     }

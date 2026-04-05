@@ -145,28 +145,50 @@
 @push('scripts')
 <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 <script>
-// Init Quill
-const quill = new Quill('#quillEditor', {
-  theme: 'snow',
-  direction: 'rtl',
-  placeholder: 'اكتب محتوى المقال هنا...',
-  modules: {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      ['blockquote', 'code-block'],
-      ['link'],
-      [{ align: [] }],
-      ['clean']
-    ]
-  }
-});
+var quill;
+try {
+  quill = new Quill('#quillEditor', {
+    theme: 'snow',
+    direction: 'rtl',
+    placeholder: 'اكتب محتوى المقال هنا...',
+    modules: {
+      toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['blockquote', 'code-block'],
+        ['link'],
+        [{ align: [] }],
+        ['clean']
+      ]
+    }
+  });
 
-// On form submit, sync Quill content to hidden textarea
-document.getElementById('articleForm').addEventListener('submit', function() {
-  document.getElementById('contentTextarea').value = quill.root.innerHTML;
-});
+  // Real-time sync so textarea is always current
+  quill.on('text-change', function() {
+    document.getElementById('contentTextarea').value = quill.root.innerHTML;
+  });
+
+  // Also sync on submit as a safety net
+  document.getElementById('articleForm').addEventListener('submit', function() {
+    document.getElementById('contentTextarea').value = quill.root.innerHTML;
+  });
+
+} catch(e) {
+  // Quill CDN failed — fall back to plain textarea
+  document.getElementById('quillEditor').style.display = 'none';
+  var ta = document.getElementById('contentTextarea');
+  ta.style.display = 'block';
+  ta.style.minHeight = '400px';
+  ta.style.width = '100%';
+  ta.style.padding = '16px';
+  ta.style.fontFamily = 'Tajawal, sans-serif';
+  ta.style.fontSize = '15px';
+  ta.style.lineHeight = '1.9';
+  ta.style.border = 'none';
+  ta.style.outline = 'none';
+  ta.style.resize = 'vertical';
+}
 
 // Image preview
 function previewImg(input) {

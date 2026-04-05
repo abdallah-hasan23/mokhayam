@@ -65,9 +65,13 @@
 </div>
 
 {{-- HEADER --}}
-<header class="site-header">
+<div class="nav-overlay" id="navOverlay" onclick="closeNav()"></div>
+<header class="site-header" id="siteHeader">
     <div class="header-inner">
         <div class="logo-row">
+            <button class="nav-hamburger" id="navHamburger" onclick="toggleNav()" aria-label="القائمة">
+                <span></span><span></span><span></span>
+            </button>
             @if($logoPath)
               <a href="{{ route('home') }}" class="logo-img">
                 <img src="{{ asset('storage/'.$logoPath) }}" alt="{{ $siteName }}">
@@ -77,7 +81,7 @@
             @endif
             <span class="logo-sub">{{ $siteTagline }}</span>
         </div>
-        <nav class="main-nav">
+        <nav class="main-nav" id="mainNav">
             <ul>
                 <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">الرئيسية</a></li>
                 @foreach($navCategories as $cat)
@@ -154,5 +158,33 @@
 </footer>
 
 <script src="{{ asset('js/app.js') }}"></script>
+<script>
+// Scroll progress bar
+const scrollBar = document.getElementById('scrollBar');
+if (scrollBar) {
+  window.addEventListener('scroll', () => {
+    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    scrollBar.style.height = pct + '%';
+  });
+}
+// Mobile nav
+function toggleNav() {
+  const nav = document.getElementById('mainNav');
+  const btn = document.getElementById('navHamburger');
+  const overlay = document.getElementById('navOverlay');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+  overlay.classList.toggle('active');
+  document.body.classList.toggle('nav-open');
+}
+function closeNav() {
+  document.getElementById('mainNav').classList.remove('open');
+  document.getElementById('navHamburger').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('active');
+  document.body.classList.remove('nav-open');
+}
+// Close nav on link click (mobile)
+document.querySelectorAll('.main-nav a').forEach(a => a.addEventListener('click', closeNav));
+</script>
 </body>
 </html>

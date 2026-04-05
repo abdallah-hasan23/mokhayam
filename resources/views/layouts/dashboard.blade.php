@@ -25,6 +25,7 @@
   $twitterUrl        = \App\Models\Setting::get('twitter','');
 @endphp
 
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 <div class="db-wrap">
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
@@ -254,8 +255,18 @@
 
 <script>
 function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('collapsed');
-  document.getElementById('dbMain').classList.toggle('expanded');
+  const sidebar  = document.getElementById('sidebar');
+  const main     = document.getElementById('dbMain');
+  const overlay  = document.getElementById('sidebarOverlay');
+  if (window.innerWidth <= 768) {
+    // Mobile: slide in/out with overlay
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('active');
+  } else {
+    // Desktop: collapse/expand
+    sidebar.classList.toggle('collapsed');
+    main.classList.toggle('expanded');
+  }
 }
 function toggleNotifDrop() {
   document.getElementById('notifDrop').classList.toggle('open');
@@ -267,6 +278,13 @@ document.addEventListener('click', function(e) {
   const notifWrap = document.getElementById('notifWrap');
   if (notifWrap && !notifWrap.contains(e.target)) {
     document.getElementById('notifDrop').classList.remove('open');
+  }
+});
+// Close sidebar on resize to desktop
+window.addEventListener('resize', function() {
+  if (window.innerWidth > 768) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('active');
   }
 });
 // Auto-dismiss alerts

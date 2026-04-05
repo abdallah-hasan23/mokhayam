@@ -15,7 +15,7 @@
         <a href="{{ route('dashboard.contact.index') }}" class="btn btn-outline">← العودة</a>
         <form method="POST" action="{{ route('dashboard.contact.destroy',$message) }}" onsubmit="return confirm('حذف؟')">
           @csrf @method('DELETE')
-          <button type="submit" class="btn-sm btn-delete">حذف</button>
+          <button type="submit" class="btn btn-delete">حذف</button>
         </form>
       </div>
     </div>
