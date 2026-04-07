@@ -107,3 +107,7 @@
 </div>
 @endif
 @endsection
+
+@push('scripts')
+<script src="{{ asset('js/animations-article.js') }}"></script>
+@endpush

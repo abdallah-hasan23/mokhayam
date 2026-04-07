@@ -159,14 +159,6 @@
 
 <script src="{{ asset('js/app.js') }}"></script>
 <script>
-// Scroll progress bar
-const scrollBar = document.getElementById('scrollBar');
-if (scrollBar) {
-  window.addEventListener('scroll', () => {
-    const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-    scrollBar.style.height = pct + '%';
-  });
-}
 // Mobile nav
 function toggleNav() {
   const nav = document.getElementById('mainNav');
@@ -183,8 +175,13 @@ function closeNav() {
   document.getElementById('navOverlay').classList.remove('active');
   document.body.classList.remove('nav-open');
 }
-// Close nav on link click (mobile)
 document.querySelectorAll('.main-nav a').forEach(a => a.addEventListener('click', closeNav));
 </script>
+
+{{-- GSAP + Animations --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="{{ asset('js/animations.js') }}"></script>
+@stack('scripts')
 </body>
 </html>

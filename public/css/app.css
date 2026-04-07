@@ -19,6 +19,9 @@ ul{list-style:none}
 /* ── SCROLL BAR ── */
 .scroll-bar{position:fixed;top:0;right:0;width:3px;background:var(--gold);z-index:9998;height:0;transition:height .05s linear}
 
+
+
+
 /* ── TOP BAR ── */
 .topbar{background:var(--ink);color:var(--sand);padding:6px 48px;display:flex;justify-content:space-between;align-items:center;font-family:'Tajawal',sans-serif;font-size:12px}
 .topbar-social{display:flex;gap:16px}

@@ -39,3 +39,7 @@
   </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('js/animations-about.js') }}"></script>
+@endpush

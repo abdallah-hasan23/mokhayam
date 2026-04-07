@@ -182,3 +182,7 @@
 
 </div>{{-- /wrap --}}
 @endsection
+
+@push('scripts')
+<script src="{{ asset('js/animations-home.js') }}"></script>
+@endpush

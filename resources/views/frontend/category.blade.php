@@ -104,3 +104,7 @@
   </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="{{ asset('js/animations-category.js') }}"></script>
+@endpush
