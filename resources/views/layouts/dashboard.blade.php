@@ -78,6 +78,17 @@
       @endif
 
       @if(auth()->user()->isAdmin())
+      <a href="{{ route('dashboard.submissions.index') }}" class="sb-link {{ request()->routeIs('dashboard.submissions*') ? 'active' : '' }}">
+        <span class="sb-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </span>
+        <span class="sb-label">قصص القراء</span>
+        @php $pendingSub = \App\Models\Submission::where('status','pending')->count(); @endphp
+        @if($pendingSub > 0)<span class="sb-badge">{{ $pendingSub }}</span>@endif
+      </a>
+      @endif
+
+      @if(auth()->user()->isAdmin())
       <a href="{{ route('dashboard.categories.index') }}" class="sb-link {{ request()->routeIs('dashboard.categories.*') ? 'active' : '' }}">
         <span class="sb-icon">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>

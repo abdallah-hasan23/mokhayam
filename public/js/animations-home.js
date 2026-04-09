@@ -8,10 +8,10 @@
 
   // ── إخفاء فوري قبل أول رسم ──────────────────────────────────
   // يُنفَّذ أثناء تحليل السكريبت (بعد تحميل GSAP مباشرة)
-  if (document.querySelector('.hm-main')) {
-    gsap.set('.hm-main',       { x: 50, opacity: 0 });
-    gsap.set('.hm-side-card',  { x: 32, opacity: 0 });
-    gsap.set('.hm-strip-card', { y: 22, opacity: 0 });
+  if (document.querySelector('.ah-main')) {
+    gsap.set('.ah-main',       { x: 50, opacity: 0 });
+    gsap.set('.ah-side-card',  { x: 32, opacity: 0 });
+    gsap.set('.ah-strip-card', { y: 22, opacity: 0 });
   }
   gsap.set('.logo-arabic, .logo-img', { y: -16, opacity: 0 });
 
@@ -28,16 +28,16 @@
     // ════════════════════════════════════════════
     // ② Hero Mosaic
     // ════════════════════════════════════════════
-    if (document.querySelector('.hm-main')) {
+    if (document.querySelector('.ah-main')) {
       var tl = gsap.timeline({ delay: 0.2 });
 
-      tl.to('.hm-main', { x: 0, opacity: 1, duration: 0.85, ease: 'power3.out' });
-      tl.from('.hm-main-info .badge',    { y: -14, opacity: 0, duration: 0.40, ease: 'power2.out' }, '-=0.52');
-      tl.from('.hm-main-info h1',        { y: 22,  opacity: 0, duration: 0.55, ease: 'power3.out' }, '-=0.30');
-      tl.from('.hm-main-info p',         { y: 16,  opacity: 0, duration: 0.45, ease: 'power2.out' }, '-=0.28');
-      tl.from('.hm-main-info .btn-read', { y: 10,  opacity: 0, duration: 0.40, ease: 'power2.out' }, '-=0.22');
-      tl.to('.hm-side-card',  { x: 0, opacity: 1, duration: 0.62, stagger: 0.13, ease: 'power3.out' }, '-=0.45');
-      tl.to('.hm-strip-card', { y: 0, opacity: 1, duration: 0.55, stagger: 0.10, ease: 'power3.out' }, '-=0.35');
+      tl.to('.ah-main', { x: 0, opacity: 1, duration: 0.85, ease: 'power3.out' });
+      tl.from('.ah-main-info .ah-badge',  { y: -14, opacity: 0, duration: 0.40, ease: 'power2.out' }, '-=0.52');
+      tl.from('.ah-main-info .ah-title',  { y: 22,  opacity: 0, duration: 0.55, ease: 'power3.out' }, '-=0.30');
+      tl.from('.ah-main-info .ah-excerpt',{ y: 16,  opacity: 0, duration: 0.45, ease: 'power2.out' }, '-=0.28');
+      tl.from('.ah-main-info .ah-meta',   { y: 10,  opacity: 0, duration: 0.40, ease: 'power2.out' }, '-=0.22');
+      tl.to('.ah-side-card',  { x: 0, opacity: 1, duration: 0.62, stagger: 0.13, ease: 'power3.out' }, '-=0.45');
+      tl.to('.ah-strip-card', { y: 0, opacity: 1, duration: 0.55, stagger: 0.10, ease: 'power3.out' }, '-=0.35');
     }
 
     // ════════════════════════════════════════════
@@ -45,7 +45,7 @@
     // ════════════════════════════════════════════
 
     // عناوين الأقسام
-    gsap.utils.toArray('.sec-head').forEach(function (el) {
+    gsap.utils.toArray('.sec-head, .sec-head-center').forEach(function (el) {
       gsap.from(el, {
         y: 22, opacity: 0, duration: 0.6, ease: 'power3.out',
         scrollTrigger: { trigger: el, start: 'top 88%' }
@@ -92,6 +92,19 @@
       gsap.from(widgets, {
         x: -24, opacity: 0, duration: 0.65, stagger: 0.18, ease: 'power3.out',
         scrollTrigger: { trigger: '.sidebar-aside', start: 'top 88%' }
+      });
+    }
+
+    // Testimonials + CTA
+    var tcta = document.querySelector('.tcta-section');
+    if (tcta) {
+      gsap.from('.testimonial-card', {
+        y: 32, opacity: 0, duration: 0.62, stagger: 0.14, ease: 'power3.out',
+        scrollTrigger: { trigger: '.testimonials', start: 'top 88%' }
+      });
+      gsap.from('.submit-cta-card', {
+        x: -36, opacity: 0, duration: 0.75, ease: 'power3.out',
+        scrollTrigger: { trigger: '.submit-cta-card', start: 'top 88%' }
       });
     }
 

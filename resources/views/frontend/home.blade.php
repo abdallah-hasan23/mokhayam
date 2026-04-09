@@ -4,92 +4,101 @@
 @section('content')
 <div class="wrap">
 
-{{-- HERO MOSAIC --}}
+{{-- ARTICLES HERO --}}
 @if($heroArticles->count())
-<section class="hero">
-  <div class="hero-mosaic">
+@php $main = $heroArticles->first(); @endphp
+<section class="ah-section">
 
-    {{-- Main --}}
-    @if($heroArticles->first())
-    @php $main = $heroArticles->first() @endphp
-    <div class="hm-main" onclick="location.href='{{ route('article.show',$main->slug) }}'">
-      @if($main->featured_image)
-        <img src="{{ $main->featured_image_url }}" class="thumb-bg" alt="{{ $main->title }}">
-      @else
-        <div class="thumb-bg g{{ ($main->id % 10) + 1 }}"></div>
-      @endif
-      <div class="hm-main-info">
-        <a href="{{ route('category.show',$main->category->slug) }}" class="badge" onclick="event.stopPropagation()">{{ $main->category->name }}</a>
-        <h1>{{ $main->title }}</h1>
-        <p>{{ $main->excerpt }}</p>
-        <a href="{{ route('article.show',$main->slug) }}" class="btn-read">اقرأ المقال كاملاً</a>
-      </div>
-    </div>
+  {{-- Main featured --}}
+  @if($main)
+  <div class="ah-main" onclick="location.href='{{ route('article.show',$main->slug) }}'">
+    @if($main->featured_image)
+      <img src="{{ $main->featured_image_url }}" class="ah-bg" alt="{{ $main->title }}">
+    @else
+      <div class="ah-bg g{{ ($main->id % 10) + 1 }}"></div>
     @endif
-
-    {{-- Side --}}
-    <div class="hm-side">
-      @foreach($heroArticles->skip(1)->take(3) as $art)
-      <div class="hm-side-card" onclick="location.href='{{ route('article.show',$art->slug) }}'">
-        @if($art->featured_image)
-          <img src="{{ $art->featured_image_url }}" class="thumb-bg" alt="{{ $art->title }}">
-        @else
-          <div class="thumb-bg g{{ ($art->id % 10) + 1 }}"></div>
-        @endif
-        <div class="hm-side-info">
-          <a href="{{ route('category.show',$art->category->slug) }}" class="badge" onclick="event.stopPropagation()">{{ $art->category->name }}</a>
-          <h3>{{ $art->title }}</h3>
-        </div>
+    <div class="ah-overlay"></div>
+    <div class="ah-main-info">
+      <a href="{{ route('category.show',$main->category->slug) }}" class="ah-badge" onclick="event.stopPropagation()">{{ $main->category->name }}</a>
+      <h1 class="ah-title">{{ $main->title }}</h1>
+      <p class="ah-excerpt">{{ $main->excerpt }}</p>
+      <div class="ah-meta">
+        <span class="ah-author">{{ $main->user->display_name }}</span>
+        <span class="ah-dot">·</span>
+        <span>{{ \App\Models\Article::toArabicDate($main->published_at) }}</span>
       </div>
-      @endforeach
     </div>
-
-    {{-- Strip --}}
-    <div class="hm-strip">
-      @foreach($heroArticles->skip(4)->take(3) as $art)
-      <div class="hm-strip-card" onclick="location.href='{{ route('article.show',$art->slug) }}'">
-        <a href="{{ route('category.show',$art->category->slug) }}" class="badge dark" onclick="event.stopPropagation()">{{ $art->category->name }}</a>
-        <h4>{{ $art->title }}</h4>
-        <div class="meta-sm">{{ $art->user->display_name }} · {{ \App\Models\Article::toArabicDate($art->published_at) }}</div>
-      </div>
-      @endforeach
-    </div>
-
   </div>
+  @endif
+
+  {{-- Side cards --}}
+  <div class="ah-side">
+    @foreach($heroArticles->skip(1)->take(2) as $art)
+    <div class="ah-side-card" onclick="location.href='{{ route('article.show',$art->slug) }}'">
+      @if($art->featured_image)
+        <img src="{{ $art->featured_image_url }}" class="ah-bg" alt="{{ $art->title }}">
+      @else
+        <div class="ah-bg g{{ ($art->id % 10) + 1 }}"></div>
+      @endif
+      <div class="ah-overlay"></div>
+      <div class="ah-side-info">
+        <a href="{{ route('category.show',$art->category->slug) }}" class="ah-badge" onclick="event.stopPropagation()">{{ $art->category->name }}</a>
+        <h3 class="ah-side-title">{{ $art->title }}</h3>
+        <div class="ah-meta">{{ $art->user->display_name }} · {{ \App\Models\Article::toArabicDate($art->published_at) }}</div>
+      </div>
+    </div>
+    @endforeach
+
+    {{-- Strip cards --}}
+    <div class="ah-strip">
+      @foreach($heroArticles->skip(3)->take(2) as $art)
+      <div class="ah-strip-card" onclick="location.href='{{ route('article.show',$art->slug) }}'">
+        <a href="{{ route('category.show',$art->category->slug) }}" class="ah-badge-dark" onclick="event.stopPropagation()">{{ $art->category->name }}</a>
+        <h4 class="ah-strip-title">{{ $art->title }}</h4>
+        <div class="ah-meta-sm">{{ $art->user->display_name }} · {{ \App\Models\Article::toArabicDate($art->published_at) }}</div>
+      </div>
+      @endforeach
+    </div>
+  </div>
+
 </section>
 @endif
 
 {{-- LATEST ARTICLES --}}
 @if($latestArticles->count())
-<div class="sec-head">
-  <h2>آخر المقالات</h2>
-  <div class="line"></div>
-  <a href="{{ route('search') }}">عرض الكل →</a>
+<div class="sec-head-center mt-52">
+  <h2>أحدث المقالات</h2>
+  <p>قصص إنسانية موثّقة من قلب الحدث</p>
 </div>
 <div class="cards-grid">
   @foreach($latestArticles as $art)
   <article class="art-card">
-    <a href="{{ route('article.show',$art->slug) }}" class="thumb">
-      @if($art->featured_image)
-        <img src="{{ $art->featured_image_url }}" alt="{{ $art->title }}">
-      @else
-        <div class="thumb-bg g{{ ($art->id % 10) + 1 }}" style="position:absolute;inset:0"></div>
-      @endif
-    </a>
+    <div class="thumb-wrap">
+      <a href="{{ route('article.show',$art->slug) }}" class="thumb">
+        @if($art->featured_image)
+          <img src="{{ $art->featured_image_url }}" alt="{{ $art->title }}">
+        @else
+          <div class="thumb-bg g{{ ($art->id % 10) + 1 }}" style="position:absolute;inset:0"></div>
+        @endif
+      </a>
+      <a href="{{ route('category.show',$art->category->slug) }}" class="card-cat-badge">{{ $art->category->name }}</a>
+    </div>
     <div class="card-body">
-      <a href="{{ route('category.show',$art->category->slug) }}" class="badge dark">{{ $art->category->name }}</a>
       <h3><a href="{{ route('article.show',$art->slug) }}">{{ $art->title }}</a></h3>
       <p>{{ $art->excerpt }}</p>
       <div class="card-foot">
-        <span>{{ $art->user->display_name }} · {{ \App\Models\Article::toArabicDate($art->published_at) }}</span>
-        <div class="share-row">
-          <a href="https://t.me/share/url?url={{ urlencode(route('article.show',$art->slug)) }}" target="_blank" title="تيليغرام">✈</a>
-          <a href="https://wa.me/?text={{ urlencode($art->title.' '.route('article.show',$art->slug)) }}" target="_blank" title="واتساب">💬</a>
+        <div class="card-author-sm">
+          <div class="card-avatar-sm">{{ $art->user->avatar_initial }}</div>
+          <span>{{ $art->user->display_name }}</span>
         </div>
+        <span class="card-date-sm">{{ \App\Models\Article::toArabicDate($art->published_at) }}</span>
       </div>
     </div>
   </article>
   @endforeach
+</div>
+<div style="text-align:center;margin-top:52px;margin-bottom:8px">
+  <a href="{{ route('search') }}" class="btn-outline btn">عرض كل المقالات ←</a>
 </div>
 @endif
 
@@ -102,6 +111,44 @@
   <a href="{{ route('article.show',$longRead->slug) }}" class="btn-gold">اقرأ التحقيق كاملاً ←</a>
 </div>
 @endif
+
+{{-- READER STORIES + CTA --}}
+@php
+  $readerStories = \App\Models\Submission::forHome()->latest()->limit(3)->get();
+@endphp
+<div class="tcta-section mt-52">
+  <div class="testimonials">
+    @forelse($readerStories as $story)
+    <div class="testimonial-card">
+      <p class="testimonial-quote">«{{ \Illuminate\Support\Str::limit($story->story, 180) }}»</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">{{ mb_substr($story->name, 0, 1) }}</div>
+        <div class="testimonial-info">
+          <div class="testimonial-name">{{ $story->name }}</div>
+          @if($story->location)
+          <div class="testimonial-role">{{ $story->location }}</div>
+          @endif
+        </div>
+      </div>
+    </div>
+    @empty
+    {{-- placeholder حتى يأتي أول إرسال --}}
+    <div class="testimonial-card testimonial-empty">
+      <div style="text-align:center;padding:20px 0">
+        <div style="font-size:36px;opacity:.2;margin-bottom:12px">✍</div>
+        <p style="font-family:'Tajawal',sans-serif;font-size:14px;color:var(--faint);margin-bottom:16px">كن أول من يشارك قصته هنا</p>
+        <a href="{{ route('submit-story') }}" class="btn-outline btn btn-sm">أرسل قصتك ←</a>
+      </div>
+    </div>
+    @endforelse
+  </div>
+  <div class="submit-cta-card">
+    <div class="submit-cta-label">شهادات القراء</div>
+    <h2>قصتك تستحق أن تُروى</h2>
+    <p>هل عشت لحظة إنسانية تريد مشاركتها؟ أرسل قصتك وقد تظهر على صفحتنا الرئيسية.</p>
+    <a href="{{ route('submit-story') }}" class="btn-white">أرسل قصتك الآن ←</a>
+  </div>
+</div>
 
 {{-- FEATURED SECTION --}}
 @if($featuredArticles->count() && $featuredCat)

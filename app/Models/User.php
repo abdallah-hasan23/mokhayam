@@ -42,7 +42,7 @@ class User extends Authenticatable
     public function getRoleColorAttribute(): string
     {
         return match($this->role) {
-            'admin'  => '#b8902a',
+            'admin'  => '#26658d',
             'editor' => '#2a7ab8',
             'writer' => '#2ab87a',
             default  => '#888',

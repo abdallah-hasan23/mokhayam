@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
-use App\Models\{Article,Category};
+use App\Models\{Article,Category,User,Setting};
 
 class HomeController extends Controller {
     public function index() {
@@ -12,6 +12,18 @@ class HomeController extends Controller {
         $featuredArticles= $featuredCat ? Article::with(['user','category'])->published()->where('category_id',$featuredCat->id)->latest('published_at')->limit(3)->get() : collect();
         $categories      = Category::withCount('publishedArticles')->orderBy('order')->get();
         $mostRead        = Article::with(['user','category'])->published()->orderByDesc('views')->limit(5)->get();
-        return view('frontend.home', compact('heroArticles','latestArticles','longRead','featuredArticles','featuredCat','categories','mostRead'));
+
+        // Hero stats
+        $heroTitle       = Setting::get('about_hero_title')    ?: 'نرى ما لا تراه الكاميرات';
+        $heroSubtitle    = Setting::get('about_hero_subtitle') ?: 'مخيّم منصة صحفية عربية مستقلة تُعنى بالقصة الإنسانية خلف الحرب والنزوح.';
+        $totalArticles   = Article::published()->count();
+        $totalWriters    = User::where('is_active', true)->count();
+        $totalCategories = Category::count();
+
+        return view('frontend.home', compact(
+            'heroArticles','latestArticles','longRead','featuredArticles','featuredCat',
+            'categories','mostRead','heroTitle','heroSubtitle',
+            'totalArticles','totalWriters','totalCategories'
+        ));
     }
 }

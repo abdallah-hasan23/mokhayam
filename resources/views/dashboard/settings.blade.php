@@ -90,6 +90,45 @@
       </div>
     </div>
 
+    {{-- Favicon --}}
+    <div class="settings-card">
+      <div class="settings-card-head">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="4"/><path d="M7 12h10M12 7v10"/></svg>
+        أيقونة التاب (Favicon)
+      </div>
+      <div class="settings-card-body">
+        <input type="hidden" name="clear_favicon" id="clearFaviconInput" value="0">
+        <div class="logo-upload-row">
+          <div class="logo-preview-box" id="faviconPreviewBox" style="width:56px;height:56px;border-radius:8px">
+            @if(!empty($settings['favicon_path']))
+              <img src="{{ asset('storage/'.$settings['favicon_path']) }}" alt="Favicon" id="faviconPreview" style="width:100%;height:100%;object-fit:contain">
+            @else
+              <div class="logo-placeholder" id="faviconPlaceholder" style="font-size:18px">🌐</div>
+              <img id="faviconPreview" style="display:none;width:100%;height:100%;object-fit:contain">
+            @endif
+          </div>
+          <div style="flex:1">
+            <p class="settings-hint">تظهر في تاب المتصفح بجانب اسم الموقع</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+              <label class="upload-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                اختر أيقونة
+                <input type="file" name="favicon_file" accept="image/png,image/jpeg,image/svg+xml,image/x-icon" style="display:none"
+                  onchange="previewLogo(this,'faviconPreview','faviconPlaceholder'); document.getElementById('clearFaviconInput').value='0'">
+              </label>
+              @if(!empty($settings['favicon_path']))
+              <button type="button" class="clear-img-btn" onclick="clearLogo('faviconPreview','faviconPlaceholder','clearFaviconInput','🌐')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+                حذف
+              </button>
+              @endif
+            </div>
+            <p class="settings-hint" style="margin-top:6px">PNG أو SVG • يُفضَّل 32×32 أو 64×64 بكسل</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     {{-- General Info --}}
     <div class="settings-card">
       <div class="settings-card-head">
@@ -109,9 +148,13 @@
           <label class="form-label">البريد الإلكتروني</label>
           <input type="email" name="site_email" class="form-control" value="{{ $settings['site_email'] ?? '' }}" placeholder="editor@mukhayyam.ps">
         </div>
-        <div class="form-group" style="margin-bottom:0">
+        <div class="form-group">
           <label class="form-label">عدد المقالات في الصفحة</label>
           <input type="number" name="articles_per_page" class="form-control" value="{{ $settings['articles_per_page'] ?? 8 }}" min="1" max="50">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">نص الفوتر (f-about)</label>
+          <textarea name="footer_about" class="form-control" rows="2" placeholder="منصة صحفية عربية مستقلة...">{{ $settings['footer_about'] ?? '' }}</textarea>
         </div>
       </div>
     </div>
@@ -163,6 +206,72 @@
           </label>
           <input name="telegram" type="url" class="form-control" value="{{ $settings['telegram'] ?? '' }}" placeholder="https://t.me/...">
         </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{{-- ═══ ABOUT PAGE ═══ --}}
+<div class="settings-card" style="margin-top:24px">
+  <div class="settings-card-head">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    صفحة عن المخيم
+  </div>
+  <div class="settings-card-body">
+
+    {{-- الصف الأول: عنوان + من نحن | أرسل قصتك --}}
+    <div class="settings-grid" style="gap:16px;margin-bottom:20px">
+
+      <div class="settings-col">
+        <div class="form-group">
+          <label class="form-label">العنوان الرئيسي</label>
+          <input name="about_hero_title" class="form-control" value="{{ $settings['about_hero_title'] ?? 'نرى ما لا تراه الكاميرات' }}" placeholder="نرى ما لا تراه الكاميرات">
+        </div>
+        <div class="form-group">
+          <label class="form-label">النص التعريفي (تحت العنوان وفي الفوتر)</label>
+          <input name="about_hero_subtitle" class="form-control" value="{{ $settings['about_hero_subtitle'] ?? '' }}" placeholder="مخيّم منصة صحفية عربية مستقلة...">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">نص "من نحن"</label>
+          <textarea name="about_who_text" class="form-control" rows="5" placeholder="اكتب هنا...">{{ $settings['about_who_text'] ?? '' }}</textarea>
+          <p class="settings-hint" style="margin-top:4px">اترك سطراً فارغاً بين الفقرات لفصلها</p>
+        </div>
+      </div>
+
+      <div class="settings-col">
+        <div class="form-group">
+          <label class="form-label">عنوان قسم "أرسل قصتك"</label>
+          <input name="about_cta_title" class="form-control" value="{{ $settings['about_cta_title'] ?? 'أرسل قصتك' }}" placeholder="أرسل قصتك">
+        </div>
+        <div class="form-group">
+          <label class="form-label">نص قسم "أرسل قصتك"</label>
+          <textarea name="about_cta_text" class="form-control" rows="3" placeholder="هل لديك قصة...">{{ $settings['about_cta_text'] ?? '' }}</textarea>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">البريد الإلكتروني للمراسلة</label>
+          <input type="email" name="about_cta_email" class="form-control" value="{{ $settings['about_cta_email'] ?? '' }}" placeholder="editor@mukhayyam.ps">
+        </div>
+      </div>
+
+    </div>
+
+    {{-- الصف الثاني: قيمنا (4 بطاقات بعرض كامل) --}}
+    <div style="border-top:1px solid var(--border);padding-top:18px">
+      <p class="form-label" style="font-weight:700;margin-bottom:14px">قيمنا — 4 بطاقات</p>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+        @foreach([1,2,3,4] as $i)
+        <div style="border:1px solid var(--border);border-radius:6px;padding:12px">
+          <div class="form-group">
+            <label class="form-label">القيمة {{ $i }} — العنوان</label>
+            <input name="value_{{ $i }}_title" class="form-control" value="{{ $settings['value_'.$i.'_title'] ?? '' }}" placeholder="عنوان القيمة">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">القيمة {{ $i }} — النص</label>
+            <input name="value_{{ $i }}_text" class="form-control" value="{{ $settings['value_'.$i.'_text'] ?? '' }}" placeholder="وصف مختصر">
+          </div>
+        </div>
+        @endforeach
       </div>
     </div>
 

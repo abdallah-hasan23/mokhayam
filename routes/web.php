@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Frontend\{HomeController, ArticleController, CategoryController, SearchController, PageController};
+use App\Http\Controllers\Frontend\{HomeController, ArticleController, CategoryController, SearchController, PageController, SubmitStoryController};
 use App\Http\Controllers\Frontend\ContactController as FrontendContact;
 use App\Http\Controllers\Dashboard\{
     HomeController as DashHome,
@@ -23,6 +23,8 @@ Route::get('/search',          [SearchController::class,'index'])->name('search'
 Route::get('/about',           [PageController::class,'about'])->name('about');
 Route::get('/contact',         [FrontendContact::class,'index'])->name('contact');
 Route::post('/contact',        [FrontendContact::class,'store'])->name('contact.store');
+Route::get('/submit-story',    [SubmitStoryController::class,'show'])->name('submit-story');
+Route::post('/submit-story',   [SubmitStoryController::class,'store'])->name('submit-story.store');
 
 // ── Auth ──────────────────────────────────────────────────────
 Route::middleware('guest')->group(function() {
@@ -60,6 +62,15 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth','active'])->g
         Route::post('/writers',          [WriterController::class,'store'])->name('writers.store');
         Route::patch('/writers/{user}',  [WriterController::class,'update'])->name('writers.update');
         Route::delete('/writers/{user}', [WriterController::class,'destroy'])->name('writers.destroy');
+    });
+
+    // Submissions (reader stories) — admin only
+    Route::middleware('role:admin')->group(function() {
+        Route::get('/submissions',                          [\App\Http\Controllers\Dashboard\SubmissionController::class,'index'])->name('submissions.index');
+        Route::patch('/submissions/{submission}/approve',   [\App\Http\Controllers\Dashboard\SubmissionController::class,'approve'])->name('submissions.approve');
+        Route::patch('/submissions/{submission}/reject',    [\App\Http\Controllers\Dashboard\SubmissionController::class,'reject'])->name('submissions.reject');
+        Route::patch('/submissions/{submission}/toggle-home',[\App\Http\Controllers\Dashboard\SubmissionController::class,'toggleHome'])->name('submissions.toggleHome');
+        Route::delete('/submissions/{submission}',          [\App\Http\Controllers\Dashboard\SubmissionController::class,'destroy'])->name('submissions.destroy');
     });
 
     // Contact messages (admin only)

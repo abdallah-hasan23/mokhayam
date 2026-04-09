@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مخيّم — UI Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&family=Cairo:wght@400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   COLOR PALETTE — استخراج من الشعار
+   Primary: #26658d (أزرق بترولي)
+============================================================ */
+:root {
+  /* ── Primary Scale ── */
+  --p-900: #0d2535;   /* أغمق درجة */
+  --p-800: #1c4d6b;   /* داكن جداً */
+  --p-700: #26658d;   /* ★ PRIMARY — اللون الأساسي */
+  --p-600: #3277a0;   /* متوسط-داكن */
+  --p-500: #3d82ab;   /* متوسط-فاتح */
+  --p-400: #5c9dbe;   /* فاتح */
+  --p-300: #8dbfd5;   /* فاتح جداً */
+  --p-200: #b8d9ea;   /* شاحب */
+  --p-100: #d4e8f5;   /* شاحب جداً */
+  --p-50:  #f0f7fb;   /* خلفية خفيفة */
+
+  /* ── Accent (دافئ — للتمييز) ── */
+  --accent:       #e8973a;
+  --accent-light: #f5c77e;
+  --accent-pale:  #fdf3e3;
+
+  /* ── Neutrals ── */
+  --ink:      #0f1923;
+  --ink2:     #1e2e3a;
+  --body:     #2d4455;
+  --muted:    #5a7a8e;
+  --faint:    #8ba5b3;
+  --border:   #c5d8e8;
+  --bg:       #f7fafb;
+  --bg2:      #edf4f9;
+  --white:    #ffffff;
+
+  /* ── Semantic ── */
+  --success: #1e7e4a;
+  --danger:  #c0392b;
+  --warning: var(--accent);
+
+  /* ── Typography ── */
+  --font-heading: 'IBM Plex Sans Arabic', sans-serif;
+  --font-body:    'Tajawal', sans-serif;
+  --font-ui:      'Cairo', sans-serif;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 4px rgba(38,101,141,.08);
+  --shadow:    0 4px 16px rgba(38,101,141,.12);
+  --shadow-lg: 0 8px 32px rgba(38,101,141,.18);
+
+  /* ── Radius ── */
+  --radius-sm: 4px;
+  --radius:    8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+/* ── RESET ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--body);line-height:1.8;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+ul{list-style:none}
+
+/* ============================================================
+   1. NAVBAR
+============================================================ */
+.navbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 68px;
+}
+.nav-logo {
+  font-family: var(--font-heading);
+  font-size: 28px; font-weight: 700;
+  color: var(--p-700);
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo span {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); display: inline-block;
+}
+.nav-links { display: flex; gap: 4px; }
+.nav-links a {
+  font-family: var(--font-ui);
+  font-size: 14px; font-weight: 600;
+  color: var(--muted);
+  padding: 8px 16px; border-radius: var(--radius);
+  transition: all .2s;
+}
+.nav-links a:hover { color: var(--p-700); background: var(--p-50); }
+.nav-links a.active { color: var(--p-700); background: var(--p-50); }
+.nav-cta {
+  background: var(--p-700); color: var(--white);
+  font-family: var(--font-ui); font-size: 13px; font-weight: 700;
+  padding: 9px 22px; border-radius: var(--radius);
+  transition: all .2s; border: none; cursor: pointer;
+}
+.nav-cta:hover { background: var(--p-800); box-shadow: var(--shadow); transform: translateY(-1px); }
+
+/* ============================================================
+   2. HERO SECTION
+============================================================ */
+.hero {
+  background: linear-gradient(135deg, var(--p-900) 0%, var(--p-700) 60%, var(--p-500) 100%);
+  color: var(--white);
+  padding: 100px 32px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-inner {
+  max-width: 1200px; margin: 0 auto;
+  position: relative;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.15); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 100px;
+  padding: 6px 16px; font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: 24px; color: rgba(255,255,255,.9);
+}
+.hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-light); }
+.hero h1 {
+  font-family: var(--font-heading);
+  font-size: 52px; font-weight: 700; line-height: 1.2;
+  margin-bottom: 20px;
+}
+.hero h1 em { font-style: normal; color: var(--accent-light); }
+.hero p {
+  font-size: 17px; line-height: 1.9;
+  color: rgba(255,255,255,.75);
+  margin-bottom: 36px;
+}
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn-hero-primary {
+  background: var(--white); color: var(--p-700);
+  font-family: var(--font-ui); font-size: 15px; font-weight: 700;
+  padding: 14px 32px; border-radius: var(--radius); border: none;
+  cursor: pointer; transition: all .25s;
+  box-shadow: 0 4px 20px rgba(0,0,0,.2);
+}
+.btn-hero-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.25); }
+.btn-hero-outline {
+  background: transparent; color: var(--white);
+  border: 2px solid rgba(255,255,255,.4);
+  font-family: var(--font-ui); font-size: 15px; font-weight: 600;
+  padding: 14px 32px; border-radius: var(--radius);
+  cursor: pointer; transition: all .25s;
+}
+.btn-hero-outline:hover { border-color: var(--white); background: rgba(255,255,255,.1); }
+.hero-visual {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.hero-card {
+  background: rgba(255,255,255,.1); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: var(--radius-lg); padding: 24px;
+  text-align: center;
+}
+.hero-card:first-child { grid-column: span 2; }
+.hero-card-num {
+  font-family: var(--font-heading); font-size: 42px; font-weight: 700;
+  color: var(--accent-light);
+}
+.hero-card-label { font-size: 13px; color: rgba(255,255,255,.65); margin-top: 4px; }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  background: var(--p-800);
+  padding: 20px 32px;
+}
+.stats-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; justify-content: space-around; align-items: center;
+  flex-wrap: wrap; gap: 24px;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: var(--font-heading); font-size: 28px; font-weight: 700;
+  color: var(--accent-light);
+}
+.stat-label { font-size: 12px; color: rgba(255,255,255,.55); margin-top: 2px; }
+
+/* ============================================================
+   3. SECTION WRAPPER
+============================================================ */
+.section { padding: 80px 32px; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-header { text-align: center; margin-bottom: 56px; }
+.section-tag {
+  display: inline-block;
+  font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--p-700);
+  background: var(--p-50); border: 1px solid var(--p-200);
+  padding: 4px 14px; border-radius: 100px;
+  margin-bottom: 16px;
+}
+.section-header h2 {
+  font-family: var(--font-heading); font-size: 36px; font-weight: 700;
+  color: var(--ink); margin-bottom: 14px;
+}
+.section-header p {
+  font-size: 16px; color: var(--muted); max-width: 560px; margin: 0 auto;
+}
+
+/* ============================================================
+   4. CARDS
+============================================================ */
+.cards-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+
+/* Article Card */
+.card {
+  background: var(--white); border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden; transition: all .25s;
+  box-shadow: var(--shadow-sm);
+}
+.card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.card-img {
+  height: 200px;
+  background: linear-gradient(135deg, var(--p-800), var(--p-500));
+  position: relative;
+  display: flex; align-items: flex-end; padding: 16px;
+}
+.card-img-alt {
+  background: linear-gradient(135deg, var(--p-900), var(--p-700));
+}
+.card-img-alt2 {
+  background: linear-gradient(135deg, var(--p-600), var(--p-300));
+}
+.card-cat {
+  background: var(--p-700); color: var(--white);
+  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  padding: 4px 12px; border-radius: 100px;
+}
+.card-body { padding: 20px; }
+.card-title {
+  font-family: var(--font-heading); font-size: 17px; font-weight: 700;
+  color: var(--ink); margin-bottom: 10px; line-height: 1.5;
+}
+.card-excerpt { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+.card-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; color: var(--faint);
+  border-top: 1px solid var(--border); padding-top: 14px;
+}
+.card-meta-author { display: flex; align-items: center; gap: 8px; }
+.card-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--p-700); color: var(--white);
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Feature Card */
+.feature-card {
+  background: var(--white); border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: 32px; transition: all .25s;
+  box-shadow: var(--shadow-sm);
+}
+.feature-card:hover { border-color: var(--p-300); box-shadow: var(--shadow); }
+.feature-icon {
+  width: 52px; height: 52px; border-radius: var(--radius-lg);
+  background: var(--p-50); border: 1px solid var(--p-200);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 20px;
+}
+.feature-card h3 {
+  font-family: var(--font-ui); font-size: 17px; font-weight: 700;
+  color: var(--ink); margin-bottom: 10px;
+}
+.feature-card p { font-size: 14px; color: var(--muted); line-height: 1.9; }
+
+/* Highlight Card */
+.highlight-card {
+  background: linear-gradient(135deg, var(--p-700), var(--p-500));
+  color: var(--white); border-radius: var(--radius-xl);
+  padding: 48px; position: relative; overflow: hidden;
+}
+.highlight-card::after {
+  content: '؟';
+  position: absolute; left: -20px; top: -20px;
+  font-size: 180px; font-weight: 900; opacity: .05;
+  font-family: var(--font-heading);
+}
+.highlight-card h3 {
+  font-family: var(--font-heading); font-size: 28px; font-weight: 700;
+  margin-bottom: 14px; position: relative;
+}
+.highlight-card p {
+  font-size: 15px; color: rgba(255,255,255,.75);
+  line-height: 1.9; margin-bottom: 28px; position: relative;
+}
+
+/* Testimonial Card */
+.testimonial-card {
+  background: var(--white); border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: 28px; box-shadow: var(--shadow-sm);
+}
+.testimonial-card blockquote {
+  font-size: 15px; color: var(--body); line-height: 1.9;
+  font-style: italic; margin-bottom: 20px;
+  border-right: 3px solid var(--p-700); padding-right: 16px;
+}
+.testimonial-author { display: flex; align-items: center; gap: 12px; }
+.testimonial-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--p-700), var(--p-500));
+  color: var(--white); font-weight: 700; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.testimonial-name { font-weight: 700; color: var(--ink); font-size: 14px; }
+.testimonial-role { font-size: 12px; color: var(--muted); }
+
+/* ============================================================
+   5. BUTTONS
+============================================================ */
+.btn-showcase {
+  background: var(--bg2); padding: 48px 32px;
+}
+.btn-grid { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: center; }
+
+.btn {
+  font-family: var(--font-ui); font-weight: 700;
+  border: none; cursor: pointer;
+  border-radius: var(--radius); transition: all .2s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-sm  { font-size: 12px; padding: 7px 16px; }
+.btn-md  { font-size: 14px; padding: 10px 24px; }
+.btn-lg  { font-size: 15px; padding: 13px 32px; }
+.btn-xl  { font-size: 16px; padding: 16px 40px; border-radius: var(--radius-lg); }
+
+.btn-primary { background: var(--p-700); color: var(--white); box-shadow: 0 2px 8px rgba(38,101,141,.3); }
+.btn-primary:hover { background: var(--p-800); box-shadow: 0 4px 16px rgba(38,101,141,.4); transform: translateY(-1px); }
+
+.btn-primary-light { background: var(--p-500); color: var(--white); }
+.btn-primary-light:hover { background: var(--p-600); transform: translateY(-1px); }
+
+.btn-outline { background: transparent; color: var(--p-700); border: 2px solid var(--p-700); }
+.btn-outline:hover { background: var(--p-50); }
+
+.btn-ghost { background: var(--p-50); color: var(--p-700); }
+.btn-ghost:hover { background: var(--p-100); }
+
+.btn-accent { background: var(--accent); color: var(--white); box-shadow: 0 2px 8px rgba(232,151,58,.3); }
+.btn-accent:hover { background: #d4831e; box-shadow: 0 4px 16px rgba(232,151,58,.4); transform: translateY(-1px); }
+
+.btn-dark { background: var(--ink); color: var(--white); }
+.btn-dark:hover { background: var(--p-900); transform: translateY(-1px); }
+
+.btn-danger { background: var(--danger); color: var(--white); }
+.btn-danger:hover { background: #a93226; transform: translateY(-1px); }
+
+.btn-success { background: var(--success); color: var(--white); }
+.btn-success:hover { background: #166038; transform: translateY(-1px); }
+
+/* ============================================================
+   6. GRADIENT SECTION
+============================================================ */
+.gradient-section {
+  background: linear-gradient(160deg, var(--p-900) 0%, var(--p-800) 40%, var(--p-700) 100%);
+  padding: 100px 32px; color: var(--white); text-align: center; position: relative;
+  overflow: hidden;
+}
+.gradient-section::before {
+  content: '';
+  position: absolute; top: -50%; right: -20%;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.06), transparent 70%);
+}
+.gradient-section h2 {
+  font-family: var(--font-heading); font-size: 44px; font-weight: 700;
+  margin-bottom: 16px; position: relative;
+}
+.gradient-section p {
+  font-size: 17px; color: rgba(255,255,255,.7);
+  max-width: 560px; margin: 0 auto 40px; position: relative;
+}
+
+/* ============================================================
+   7. COLOR PALETTE DISPLAY
+============================================================ */
+.palette-grid {
+  display: grid; grid-template-columns: repeat(10, 1fr); gap: 8px; margin-bottom: 40px;
+}
+.swatch {
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.swatch-color { height: 80px; }
+.swatch-info { padding: 8px; background: var(--white); border-top: 1px solid var(--border); }
+.swatch-name { font-size: 10px; font-weight: 700; color: var(--ink); }
+.swatch-hex  { font-size: 9px; color: var(--muted); font-family: monospace; }
+
+.palette-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.accent-swatch {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 16px; flex: 1; min-width: 160px;
+}
+.accent-dot { width: 40px; height: 40px; border-radius: var(--radius-sm); flex-shrink: 0; }
+.accent-label { font-size: 12px; font-weight: 700; color: var(--ink); }
+.accent-hex   { font-size: 11px; color: var(--muted); font-family: monospace; }
+
+/* ============================================================
+   8. TYPOGRAPHY
+============================================================ */
+.type-sample { background: var(--white); border-radius: var(--radius-lg); padding: 40px; border: 1px solid var(--border); }
+.type-row { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; gap: 24px; }
+.type-row:last-child { border-bottom: none; }
+.type-meta { font-size: 11px; color: var(--muted); min-width: 140px; }
+.t-h1 { font-family: var(--font-heading); font-size: 48px; font-weight: 700; color: var(--ink); }
+.t-h2 { font-family: var(--font-heading); font-size: 36px; font-weight: 700; color: var(--ink); }
+.t-h3 { font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: var(--ink); }
+.t-h4 { font-family: var(--font-ui); font-size: 18px; font-weight: 700; color: var(--ink); }
+.t-body { font-family: var(--font-body); font-size: 16px; color: var(--body); }
+.t-small { font-family: var(--font-body); font-size: 14px; color: var(--muted); }
+.t-caption { font-family: var(--font-body); font-size: 12px; color: var(--faint); }
+.t-label { font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--p-700); }
+
+/* ============================================================
+   9. FORM ELEMENTS
+============================================================ */
+.form-demo { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-family: var(--font-ui); font-size: 13px; font-weight: 700; color: var(--ink2); }
+.form-input {
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  padding: 11px 14px; font-family: var(--font-body); font-size: 14px;
+  color: var(--ink); background: var(--white); transition: all .2s;
+  outline: none;
+}
+.form-input:focus { border-color: var(--p-500); box-shadow: 0 0 0 3px var(--p-100); }
+.form-input::placeholder { color: var(--faint); }
+textarea.form-input { resize: vertical; min-height: 100px; }
+.form-select {
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  padding: 11px 14px; font-family: var(--font-body); font-size: 14px;
+  color: var(--ink); background: var(--white); outline: none; cursor: pointer;
+}
+.form-select:focus { border-color: var(--p-500); box-shadow: 0 0 0 3px var(--p-100); }
+.form-hint { font-size: 12px; color: var(--muted); }
+
+/* ============================================================
+   10. BADGES & TAGS
+============================================================ */
+.badge-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.badge {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  padding: 4px 12px; border-radius: 100px;
+  letter-spacing: .05em;
+}
+.badge-primary { background: var(--p-700); color: var(--white); }
+.badge-light   { background: var(--p-50);  color: var(--p-700); border: 1px solid var(--p-200); }
+.badge-accent  { background: var(--accent); color: var(--white); }
+.badge-accent-light { background: var(--accent-pale); color: var(--accent); border: 1px solid var(--accent-light); }
+.badge-dark    { background: var(--ink); color: var(--white); }
+.badge-success { background: #e8f7ee; color: var(--success); border: 1px solid #b8e0c8; }
+.badge-danger  { background: #fdf0ef; color: var(--danger);  border: 1px solid #f5c6c2; }
+
+/* ============================================================
+   11. PROGRESS / DIVIDERS
+============================================================ */
+.divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+.divider-center {
+  display: flex; align-items: center; gap: 16px;
+  color: var(--faint); font-size: 13px; margin: 32px 0;
+}
+.divider-center::before, .divider-center::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* ============================================================
+   12. FOOTER
+============================================================ */
+.footer {
+  background: var(--p-700); color: rgba(255,255,255,.85);
+  padding: 64px 32px 32px;
+}
+.footer-inner { max-width: 1200px; margin: 0 auto; }
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  margin-bottom: 32px;
+}
+.footer-logo {
+  font-family: var(--font-heading); font-size: 40px; font-weight: 700;
+  color: var(--white); margin-bottom: 14px; display: block;
+}
+.footer-tagline {
+  font-size: 14px; font-weight: 600;
+  color: rgba(255,255,255,.8); margin-bottom: 8px;
+}
+.footer-desc { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.9; }
+.footer-col h4 {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(255,255,255,.9); margin-bottom: 20px;
+}
+.footer-col ul { display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul li a {
+  font-size: 13px; color: rgba(255,255,255,.5); transition: color .2s;
+}
+.footer-col ul li a:hover { color: var(--white); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-copy { font-size: 12px; color: rgba(255,255,255,.35); }
+.footer-social { display: flex; gap: 14px; }
+.footer-social a {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.6); font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.footer-social a:hover { background: rgba(255,255,255,.2); color: var(--white); }
+
+/* ── PAGE SECTIONS ── */
+.section-alt { background: var(--bg2); }
+.section-dark { background: var(--ink); color: var(--white); }
+.kit-header {
+  background: var(--p-900); color: var(--white);
+  padding: 20px 32px; font-family: var(--font-ui); font-size: 12px;
+  font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+}
+.kit-header span { color: var(--accent-light); }
+.section-label {
+  font-family: var(--font-ui); font-size: 11px; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--p-500); background: var(--p-50);
+  border: 1px solid var(--p-200); border-radius: var(--radius-sm);
+  padding: 4px 12px; display: inline-block; margin-bottom: 24px;
+}
+</style>
+</head>
+<body>
+
+<!-- KIT HEADER -->
+<div class="kit-header">مخيّم — <span>UI Kit & Color System</span> — v1.0</div>
+
+<!-- ══════════════════════════════════════════
+  SECTION 0: COLOR PALETTE
+══════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">01 — Color Palette</div>
+    <div class="section-header" style="text-align:right;margin-bottom:32px">
+      <h2>نظام الألوان</h2>
+      <p>مبني على اللون الأساسي #26658d المستخرج من الشعار</p>
+    </div>
+
+    <!-- Primary Scale -->
+    <p style="font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:12px">Primary Scale</p>
+    <div class="palette-grid">
+      <div class="swatch"><div class="swatch-color" style="background:#0d2535"></div><div class="swatch-info"><div class="swatch-name">900</div><div class="swatch-hex">#0d2535</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#1c4d6b"></div><div class="swatch-info"><div class="swatch-name">800</div><div class="swatch-hex">#1c4d6b</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#26658d"></div><div class="swatch-info"><div class="swatch-name">★ 700</div><div class="swatch-hex">#26658d</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#3277a0"></div><div class="swatch-info"><div class="swatch-name">600</div><div class="swatch-hex">#3277a0</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#3d82ab"></div><div class="swatch-info"><div class="swatch-name">500</div><div class="swatch-hex">#3d82ab</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#5c9dbe"></div><div class="swatch-info"><div class="swatch-name">400</div><div class="swatch-hex">#5c9dbe</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#8dbfd5"></div><div class="swatch-info"><div class="swatch-name">300</div><div class="swatch-hex">#8dbfd5</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#b8d9ea"></div><div class="swatch-info"><div class="swatch-name">200</div><div class="swatch-hex">#b8d9ea</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#d4e8f5"></div><div class="swatch-info"><div class="swatch-name">100</div><div class="swatch-hex">#d4e8f5</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#f0f7fb"></div><div class="swatch-info"><div class="swatch-name">50</div><div class="swatch-hex">#f0f7fb</div></div></div>
+    </div>
+
+    <!-- Other Colors -->
+    <div class="palette-row">
+      <div class="accent-swatch"><div class="accent-dot" style="background:#e8973a"></div><div><div class="accent-label">Accent — دافئ</div><div class="accent-hex">#e8973a</div></div></div>
+      <div class="accent-swatch"><div class="accent-dot" style="background:#f5c77e"></div><div><div class="accent-label">Accent Light</div><div class="accent-hex">#f5c77e</div></div></div>
+      <div class="accent-swatch"><div class="accent-dot" style="background:#0f1923"></div><div><div class="accent-label">Ink Dark</div><div class="accent-hex">#0f1923</div></div></div>
+      <div class="accent-swatch"><div class="accent-dot" style="background:#2d4455"></div><div><div class="accent-label">Body Text</div><div class="accent-hex">#2d4455</div></div></div>
+      <div class="accent-swatch"><div class="accent-dot" style="background:#5a7a8e"></div><div><div class="accent-label">Muted Text</div><div class="accent-hex">#5a7a8e</div></div></div>
+      <div class="accent-swatch"><div class="accent-dot" style="background:#f7fafb;border:1px solid #c5d8e8"></div><div><div class="accent-label">Background</div><div class="accent-hex">#f7fafb</div></div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" style="margin:0">
+
+<!-- ══════════════════════════════════════════
+  NAVBAR
+══════════════════════════════════════════ -->
+<div style="padding:40px 32px;background:var(--bg2)">
+  <div class="section-label">02 — Navbar</div>
+</div>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">مخيّم <span></span></a>
+    <div class="nav-links">
+      <a href="#" class="active">الرئيسية</a>
+      <a href="#">المقالات</a>
+      <a href="#">الأقسام</a>
+      <a href="#">عن المخيم</a>
+      <a href="#">تواصل</a>
+    </div>
+    <button class="nav-cta">اشترك الآن</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+  HERO
+══════════════════════════════════════════ -->
+<div style="padding:40px 32px 0;background:var(--bg2)">
+  <div class="section-label">03 — Hero Section</div>
+</div>
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">منصة صحفية مستقلة</div>
+      <h1>نرى ما لا <em>تراه</em><br>الكاميرات</h1>
+      <p>مخيّم منصة عربية تُعنى بالقصة الإنسانية خلف الحرب والنزوح. نؤمن بأن الكتابة شكل من أشكال المقاومة.</p>
+      <div class="hero-actions">
+        <button class="btn-hero-primary">اقرأ المقالات ←</button>
+        <button class="btn-hero-outline">تعرّف علينا</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card" style="grid-column:span 2">
+        <div class="hero-card-num">+١٢٠</div>
+        <div class="hero-card-label">مقال منشور</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-num">٨</div>
+        <div class="hero-card-label">أقسام</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-num">٥</div>
+        <div class="hero-card-label">كتّاب</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-num">١٢٠+</div><div class="stat-label">مقال منشور</div></div>
+    <div class="stat-item"><div class="stat-num">٥٠ألف+</div><div class="stat-label">قارئ شهري</div></div>
+    <div class="stat-item"><div class="stat-num">٨</div><div class="stat-label">أقسام متنوعة</div></div>
+    <div class="stat-item"><div class="stat-num">٢٠٢٣</div><div class="stat-label">سنة التأسيس</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+  CARDS
+══════════════════════════════════════════ -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <div class="section-label">04 — Cards</div>
+    <div class="section-header">
+      <h2>أحدث المقالات</h2>
+      <p>قصص إنسانية موثّقة من قلب الحدث</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-img"><span class="card-cat">تقارير</span></div>
+        <div class="card-body">
+          <h3 class="card-title">أطفال في خيام المطر — حكاية لم تُروَ بعد</h3>
+          <p class="card-excerpt">في مخيمات الشمال السوري، يقضي آلاف الأطفال شتاءهم بلا دفء ولا كهرباء...</p>
+          <div class="card-meta">
+            <div class="card-meta-author">
+              <div class="card-avatar">م</div>
+              <span>محمد السيد</span>
+            </div>
+            <span>٧ أبريل ٢٠٢٦</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img card-img-alt"><span class="card-cat">تحقيقات</span></div>
+        <div class="card-body">
+          <h3 class="card-title">مسارات اللجوء — من الحدود إلى المجهول</h3>
+          <p class="card-excerpt">تحقيق ميداني مع عائلات تروي تجربة العبور الخطر عبر الحدود الأوروبية...</p>
+          <div class="card-meta">
+            <div class="card-meta-author">
+              <div class="card-avatar">ف</div>
+              <span>فاطمة النور</span>
+            </div>
+            <span>٥ أبريل ٢٠٢٦</span>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img card-img-alt2"><span class="card-cat">رأي</span></div>
+        <div class="card-body">
+          <h3 class="card-title">الكتابة عن الحرب — مسؤولية لا رفاهية</h3>
+          <p class="card-excerpt">حين يصبح القلم وسيلة المقاومة الوحيدة، تتحول الكلمات إلى شهادة للتاريخ...</p>
+          <div class="card-meta">
+            <div class="card-meta-author">
+              <div class="card-avatar">أ</div>
+              <span>أحمد خليل</span>
+            </div>
+            <span>٣ أبريل ٢٠٢٦</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Feature Cards -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">04b — Feature Cards</div>
+    <div class="cards-grid" style="margin-top:24px">
+      <div class="feature-card">
+        <div class="feature-icon">✍️</div>
+        <h3>تحرير مستقل</h3>
+        <p>لا أجندات ولا وصاية. كل كلمة تُكتب بحرية وأمانة تامة بعيداً عن أي تمويل مشبوه.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌍</div>
+        <h3>تغطية ميدانية</h3>
+        <p>مراسلون في قلب الحدث يوثّقون الواقع كما هو، لا كما يريده أصحاب القرار.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📖</div>
+        <h3>عمق قبل الآنية</h3>
+        <p>نفضّل مقالاً واحداً مدروساً ومبنياً على تحقيق حقيقي على عشرة مقالات سريعة.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Highlight + Testimonials -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px">
+      <div class="highlight-card">
+        <h3>أرسل قصتك إلينا</h3>
+        <p>هل لديك قصة تستحق أن تُروى؟ باب مخيّم مفتوح لكل كاتب يؤمن بالإنسان ويحمل شهادة حقيقية.</p>
+        <button class="btn btn-md" style="background:var(--white);color:var(--p-700);font-weight:700;border:none;cursor:pointer;border-radius:var(--radius)">أرسل مقالك ←</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="testimonial-card">
+          <blockquote>"مخيّم غيّر طريقة تعاملي مع الأخبار — لأول مرة أشعر أن هناك من يهتم بالإنسان قبل الحدث"</blockquote>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">س</div>
+            <div><div class="testimonial-name">سارة محمود</div><div class="testimonial-role">قارئة من الأردن</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <blockquote>"أفضل منصة عربية للصحافة الإنسانية — كل مقال يحمل روحاً حقيقية وقلماً صادقاً"</blockquote>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">ع</div>
+            <div><div class="testimonial-name">عمر الشيخ</div><div class="testimonial-role">كاتب مستقل</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+  BUTTONS
+══════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">05 — Buttons</div>
+    <div class="section-header" style="text-align:right;margin-bottom:32px">
+      <h2>عناصر التفاعل</h2>
+    </div>
+
+    <p style="font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Variants</p>
+    <div class="btn-grid" style="justify-content:flex-start;margin-bottom:32px">
+      <button class="btn btn-lg btn-primary">← أساسي</button>
+      <button class="btn btn-lg btn-primary-light">فاتح</button>
+      <button class="btn btn-lg btn-outline">إطار</button>
+      <button class="btn btn-lg btn-ghost">شفاف</button>
+      <button class="btn btn-lg btn-accent">مميّز</button>
+      <button class="btn btn-lg btn-dark">داكن</button>
+      <button class="btn btn-lg btn-success">نجاح</button>
+      <button class="btn btn-lg btn-danger">خطر</button>
+    </div>
+
+    <p style="font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Sizes</p>
+    <div class="btn-grid" style="justify-content:flex-start">
+      <button class="btn btn-sm btn-primary">صغير SM</button>
+      <button class="btn btn-md btn-primary">متوسط MD</button>
+      <button class="btn btn-lg btn-primary">كبير LG</button>
+      <button class="btn btn-xl btn-primary">كبير جداً XL</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+  BADGES & TAGS
+══════════════════════════════════════════ -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <div class="section-label">06 — Badges & Tags</div>
+    <div style="margin-top:24px">
+      <div class="badge-row">
+        <span class="badge badge-primary">أساسي</span>
+        <span class="badge badge-light">فاتح</span>
+        <span class="badge badge-accent">مميّز</span>
+        <span class="badge badge-accent-light">مميّز فاتح</span>
+        <span class="badge badge-dark">داكن</span>
+        <span class="badge badge-success">✓ منشور</span>
+        <span class="badge badge-danger">✗ مرفوض</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+  TYPOGRAPHY
+══════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label">07 — Typography</div>
+    <div class="type-sample" style="margin-top:24px">
+      <div class="type-row"><span class="type-meta">H1 — IBM Plex 48px</span><span class="t-h1">عنوان رئيسي</span></div>
+      <div class="type-row"><span class="type-meta">H2 — IBM Plex 36px</span><span class="t-h2">عنوان ثانوي</span></div>
+      <div class="type-row"><span class="type-meta">H3 — IBM Plex 24px</span><span class="t-h3">عنوان فرعي</span></div>
+      <div class="type-row"><span class="type-meta">H4 — Cairo 18px</span><span class="t-h4">عنوان رابع</span></div>
+      <div class="type-row"><span class="type-meta">Body — Tajawal 16px</span><span class="t-body">نص المحتوى الرئيسي — وضوح وقراءة مريحة</span></div>
+      <div class="type-row"><span class="type-meta">Small — Tajawal 14px</span><span class="t-small">نص صغير للتفاصيل والبيانات</span></div>
+      <div class="type-row"><span class="type-meta">Caption — Tajawal 12px</span><span class="t-caption">نص توضيحي صغير جداً</span></div>
+      <div class="type-row"><span class="type-meta">Label — Cairo 11px</span><span class="t-label">تصنيف مميّز</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+  FORM
+══════════════════════════════════════════ -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <div class="section-label">08 — Form Elements</div>
+    <div class="form-demo" style="margin-top:24px;background:var(--white);padding:32px;border-radius:var(--radius-lg);border:1px solid var(--border)">
+      <div class="form-group">
+        <label class="form-label">الاسم الكامل</label>
+        <input class="form-input" type="text" placeholder="مثال: محمد السيد">
+      </div>
+      <div class="form-group">
+        <label class="form-label">البريد الإلكتروني</label>
+        <input class="form-input" type="email" placeholder="example@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">القسم</label>
+        <select class="form-select">
+          <option>اختر القسم</option>
+          <option>تقارير</option>
+          <option>تحقيقات</option>
+          <option>رأي</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">رسالتك</label>
+        <textarea class="form-input" placeholder="اكتب رسالتك هنا..."></textarea>
+        <span class="form-hint">الحد الأقصى ٥٠٠ حرف</span>
+      </div>
+      <div style="grid-column:span 2;display:flex;gap:12px">
+        <button class="btn btn-lg btn-primary">إرسال الرسالة</button>
+        <button class="btn btn-lg btn-ghost">إلغاء</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+  GRADIENT CTA
+══════════════════════════════════════════ -->
+<section class="gradient-section">
+  <h2>انضم إلى مجتمع مخيّم</h2>
+  <p>كن جزءاً من منصة تؤمن بأن القصة الإنسانية تستحق أن تُروى بأمانة وشجاعة</p>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;position:relative">
+    <button class="btn btn-xl" style="background:var(--white);color:var(--p-700);font-weight:700;border:none;cursor:pointer">ابدأ القراءة الآن ←</button>
+    <button class="btn btn-xl btn-hero-outline" style="font-family:var(--font-ui);font-size:16px;padding:16px 40px;background:transparent;color:var(--white);border:2px solid rgba(255,255,255,.4);border-radius:var(--radius-lg);cursor:pointer">أرسل مقالك</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+  FOOTER
+══════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <span class="footer-logo">مخيّم</span>
+        <p class="footer-tagline">صدى النزوح</p>
+        <p class="footer-desc">منصة صحفية عربية مستقلة تُعنى بالقصة الإنسانية خلف الحرب والنزوح. الكتابة مقاومة.</p>
+      </div>
+      <div class="footer-col">
+        <h4>المنصة</h4>
+        <ul>
+          <li><a href="#">عن مخيّم</a></li>
+          <li><a href="#">فريق التحرير</a></li>
+          <li><a href="#">سياسة النشر</a></li>
+          <li><a href="#">تواصل معنا</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>الأقسام</h4>
+        <ul>
+          <li><a href="#">تقارير</a></li>
+          <li><a href="#">تحقيقات</a></li>
+          <li><a href="#">رأي</a></li>
+          <li><a href="#">صور وفيديو</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>تواصل</h4>
+        <ul>
+          <li><a href="#">editor@mukhayyam.ps</a></li>
+          <li><a href="#">تيليغرام</a></li>
+          <li><a href="#">تويتر</a></li>
+          <li><a href="#">إنستغرام</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© ٢٠٢٦ مخيّم — جميع الحقوق محفوظة</span>
+      <div class="footer-social">
+        <a href="#" title="تويتر">𝕏</a>
+        <a href="#" title="تيليغرام">✈</a>
+        <a href="#" title="إنستغرام">◉</a>
+        <a href="#" title="تيك توك">♪</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
