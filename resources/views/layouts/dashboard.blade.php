@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <title>@yield('title','لوحة التحكم') — مخيّم</title>
+@php $faviconPath = \App\Models\Setting::get('favicon_path',''); @endphp
+@if($faviconPath)
+<link rel="icon" href="{{ asset('storage/'.$faviconPath) }}">
+<link rel="shortcut icon" href="{{ asset('storage/'.$faviconPath) }}">
+@else
+<link rel="icon" href="{{ asset('favicon.ico') }}">
+@endif
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 @stack('styles')
@@ -31,14 +38,17 @@
   <aside class="sidebar" id="sidebar">
     <div class="sb-header">
       <div class="sb-logo">
-        <div class="sb-logo-mark">
-          @if($logoPath)
-            <img src="{{ asset('storage/'.$logoPath) }}" alt="Logo" style="width:100%;height:100%;object-fit:cover;border-radius:4px">
-          @else
-            م
-          @endif
-        </div>
-        <span class="sb-logo-text">مخيّم</span>
+        @if($logoPath)
+          <div class="sb-logo-mark">
+            <img src="{{ asset('storage/'.$logoPath) }}" alt="Logo" style="width:100%;height:100%;object-fit:contain;border-radius:4px">
+          </div>
+          <a href="{{ route('home') }}" class="sb-logo-img-wrap">
+            <img src="{{ asset('storage/'.$logoPath) }}" alt="مخيّم" class="sb-logo-full">
+          </a>
+        @else
+          <div class="sb-logo-mark">م</div>
+          <span class="sb-logo-text">مخيّم</span>
+        @endif
       </div>
     </div>
 

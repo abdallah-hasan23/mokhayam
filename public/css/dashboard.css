@@ -38,6 +38,9 @@ ul{list-style:none}
 .sb-logo{padding:20px 16px;display:flex;align-items:center;gap:11px}
 .sb-logo-mark{width:36px;height:36px;flex-shrink:0;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:17px;font-weight:700;color:#fff;overflow:hidden;box-shadow:0 4px 12px rgba(38,101,141,.4)}
 .sb-logo-text{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:20px;font-weight:700;color:#fff;white-space:nowrap;transition:opacity .2s}
+.sb-logo-img-wrap{display:flex;align-items:center;overflow:hidden;transition:opacity .2s}
+.sb-logo-full{height:36px;width:auto;object-fit:contain;filter:brightness(0) invert(1);transition:opacity .2s}
+.sidebar.collapsed .sb-logo-img-wrap{opacity:0;width:0;overflow:hidden}
 .sidebar.collapsed .sb-logo-text{opacity:0;width:0;overflow:hidden}
 .sb-nav{flex:1;padding:10px 10px}
 .sb-link{display:flex;align-items:center;gap:11px;padding:10px 12px;color:rgba(255,255,255,.45);cursor:pointer;transition:all .18s;position:relative;white-space:nowrap;border-radius:8px;text-decoration:none;margin-bottom:2px}
