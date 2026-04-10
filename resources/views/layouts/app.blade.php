@@ -101,7 +101,7 @@
                     </li>
                     @endforeach
                     <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">عن مخيّم</a></li>
-                    <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact*') ? 'active' : '' }}">تواصل</a></li>
+                    {{-- contact nav item removed --}}
                 </ul>
             </nav>
 
@@ -140,7 +140,7 @@
         <div class="footer-top">
             <div class="footer-brand">
                 @if($logoSubPath)
-                  <a href="{{ route('home') }}"><img src="{{ asset('storage/'.$logoSubPath) }}" alt="{{ $siteName }}" style="height:40px;margin-bottom:8px"></a>
+                  <a href="{{ route('home') }}"><img src="{{ asset('storage/'.$logoSubPath) }}" alt="{{ $siteName }}" style="height:64px;margin-bottom:8px"></a>
                 @else
                   <a href="{{ route('home') }}" class="f-logo">{{ $siteName }}</a>
                 @endif

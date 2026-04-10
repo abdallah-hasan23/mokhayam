@@ -87,14 +87,8 @@
   </div>
   <div class="related-grid mb-80">
     @foreach($related as $art)
-    <article class="art-card">
-      <a href="{{ route('article.show',$art->slug) }}" class="thumb">
-        @if($art->featured_image)
-          <img src="{{ $art->featured_image_url }}" alt="{{ $art->title }}">
-        @else
-          <div class="thumb-bg g{{ ($art->id%10)+1 }}" style="position:absolute;inset:0"></div>
-        @endif
-      </a>
+    {{-- related: no image --}}
+    <article class="art-card art-card--no-thumb">
       <div class="card-body">
         <a href="{{ route('category.show',$art->category->slug) }}" class="badge dark">{{ $art->category->name }}</a>
         <h3><a href="{{ route('article.show',$art->slug) }}">{{ $art->title }}</a></h3>

@@ -163,6 +163,9 @@ ul{list-style:none}
 .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
 .art-card{cursor:pointer;display:flex;flex-direction:column;gap:0;background:#fff;border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 12px rgba(38,101,141,.07);transition:transform .25s,box-shadow .25s}
 .art-card:hover{transform:translateY(-5px);box-shadow:0 12px 36px rgba(38,101,141,.16)}
+/* related articles: no thumbnail */
+.art-card--no-thumb .thumb-wrap{display:none}
+.art-card--no-thumb .card-body{padding:24px}
 /* thumb-wrap: holds image + category badge overlay */
 .art-card .thumb-wrap{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--sand);flex-shrink:0}
 .art-card .thumb{position:absolute;inset:0;display:block}
@@ -209,7 +212,7 @@ ul{list-style:none}
 .testimonial-info{text-align:right;flex:1}
 .testimonial-name{font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;color:var(--ink)}
 .testimonial-role{font-family:'Tajawal',sans-serif;font-size:12px;color:var(--faint)}
-.submit-cta-card{background:linear-gradient(135deg,var(--rust) 0%,var(--gold) 55%,var(--gold-l) 100%);border-radius:16px;padding:48px 36px;display:flex;flex-direction:column;justify-content:center;gap:0;box-shadow:0 8px 32px rgba(38,101,141,.25);position:relative;overflow:hidden}
+.submit-cta-card{margin-top:32px;margin-bottom:32px;background:linear-gradient(135deg,var(--rust) 0%,var(--gold) 55%,var(--gold-l) 100%);border-radius:16px;padding:48px 36px;display:flex;flex-direction:column;justify-content:center;gap:0;box-shadow:0 8px 32px rgba(38,101,141,.25);position:relative;overflow:hidden}
 .submit-cta-card::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(255,255,255,.03) 40px,rgba(255,255,255,.03) 41px);pointer-events:none}
 .submit-cta-label{font-family:'Tajawal',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:10px}
 .submit-cta-card h2{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:28px;font-weight:700;color:#fff;margin-bottom:12px;position:relative}
@@ -405,12 +408,12 @@ ul{list-style:none}
 
 /* ── CONTACT PAGE ── */
 .contact-page{display:grid;grid-template-columns:1fr 300px;gap:40px;padding-top:56px;padding-bottom:100px;align-items:start}
-.contact-form-card{background:#fff;border-radius:16px;border:1px solid var(--border);padding:40px;box-shadow:0 4px 20px rgba(38,101,141,.08)}
+.contact-form-card{margin-top:32px;background:#fff;border-radius:16px;border:1px solid var(--border);padding:40px;box-shadow:0 4px 20px rgba(38,101,141,.08)}
 .contact-form{display:flex;flex-direction:column;gap:20px}
 .form-group{display:flex;flex-direction:column;gap:6px}
 .form-error{font-family:'Tajawal',sans-serif;font-size:12px;color:#d93025;margin-top:4px}
 .form-control.is-invalid{border-color:#d93025}
-.contact-info{display:flex;flex-direction:column;gap:16px}
+.contact-info{display:flex;flex-direction:column;gap:16px;margin-bottom:32px}
 .contact-info-card{background:#fff;border-radius:14px;border:1px solid var(--border);border-right:3px solid var(--gold);padding:22px 24px;box-shadow:0 2px 8px rgba(38,101,141,.06)}
 .ci-icon{font-size:24px;margin-bottom:10px;display:block}
 .contact-info-card h3{font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px}
