@@ -60,10 +60,17 @@
         y: -14, ease: 'none',
         scrollTrigger: { trigger: cta, start: 'top bottom', end: 'bottom top', scrub: 1.8 }
       });
-      gsap.from(cta.querySelectorAll('h2, p, a'), {
-        y: 24, opacity: 0, duration: 0.62, stagger: 0.14, ease: 'power3.out',
-        scrollTrigger: { trigger: cta, start: 'top 84%' }
-      });
+      var ctaEls = cta.querySelectorAll('h2, p, a');
+      // إذا كان العنصر مرئياً عند التحميل، شغّل الأنيميشن فوراً
+      var rect = cta.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        gsap.from(ctaEls, { y: 24, opacity: 0, duration: 0.62, stagger: 0.14, ease: 'power3.out' });
+      } else {
+        gsap.from(ctaEls, {
+          y: 24, opacity: 0, duration: 0.62, stagger: 0.14, ease: 'power3.out',
+          scrollTrigger: { trigger: cta, start: 'top 95%' }
+        });
+      }
     }
 
   });
