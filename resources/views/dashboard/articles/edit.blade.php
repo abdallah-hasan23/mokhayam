@@ -117,16 +117,25 @@
       <div class="editor-box">
         <div class="editor-box-head"><h3>صورة المقال</h3></div>
         <div style="padding:14px">
-          @if($article->featured_image)
-            <img src="{{ $article->featured_image_url }}" id="imgPreview" style="width:100%;border-radius:4px;margin-bottom:10px;border:1px solid var(--border)">
-          @else
-            <img id="imgPreview" style="display:none;width:100%;margin-bottom:10px;border-radius:4px;border:1px solid var(--border)">
-          @endif
-          <label class="upload-btn" style="display:inline-flex">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            {{ $article->featured_image ? 'تغيير الصورة' : 'اختر صورة' }}
-            <input type="file" name="featured_image" accept="image/*" style="display:none" onchange="previewImg(this)">
-          </label>
+          <input type="hidden" name="clear_featured_image" id="clearImgInput" value="0">
+          <img src="{{ $article->featured_image ? $article->featured_image_url : '' }}"
+               id="imgPreview"
+               style="width:100%;border-radius:4px;margin-bottom:10px;border:1px solid var(--border);{{ $article->featured_image ? '' : 'display:none' }}">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <label class="upload-btn" style="display:inline-flex">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              {{ $article->featured_image ? 'تغيير الصورة' : 'اختر صورة' }}
+              <input type="file" name="featured_image" accept="image/*" style="display:none"
+                     onchange="previewImg(this); document.getElementById('clearImgInput').value='0'">
+            </label>
+            @if($article->featured_image)
+            <button type="button" class="clear-img-btn" id="clearImgBtn"
+                    onclick="document.getElementById('imgPreview').style.display='none'; document.getElementById('clearImgInput').value='1'; this.style.display='none'">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+              حذف الصورة
+            </button>
+            @endif
+          </div>
         </div>
       </div>
 

@@ -229,7 +229,7 @@
           <input name="about_hero_title" class="form-control" value="{{ $settings['about_hero_title'] ?? 'نرى ما لا تراه الكاميرات' }}" placeholder="نرى ما لا تراه الكاميرات">
         </div>
         <div class="form-group">
-          <label class="form-label">النص التعريفي (تحت العنوان وفي الفوتر)</label>
+          <label class="form-label">النص التعريفي (تحت العنوان فقط)</label>
           <input name="about_hero_subtitle" class="form-control" value="{{ $settings['about_hero_subtitle'] ?? '' }}" placeholder="مخيّم منصة صحفية عربية مستقلة...">
         </div>
         <div class="form-group" style="margin-bottom:0">

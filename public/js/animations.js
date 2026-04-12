@@ -44,10 +44,10 @@ requestAnimationFrame(function () {
   // ── ٣. Hover على الكاردات ────────────────────────────────────
   document.querySelectorAll('.art-card, .cat-feat-side-card, .hm-side-card, .cat-list-item').forEach(function (card) {
     card.addEventListener('mouseenter', function () {
-      gsap.to(card, { y: -5, duration: 0.28, ease: 'power2.out' });
+      gsap.to(card, { duration: 0.22, ease: 'power2.out' });
     });
     card.addEventListener('mouseleave', function () {
-      gsap.to(card, { y: 0,  duration: 0.22, ease: 'power2.in'  });
+      gsap.to(card, { duration: 0.18, ease: 'power2.in'  });
     });
   });
 

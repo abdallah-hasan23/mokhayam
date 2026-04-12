@@ -153,6 +153,9 @@ class ArticleController extends Controller
         if ($request->hasFile('featured_image')) {
             if ($article->featured_image) Storage::disk('public')->delete($article->featured_image);
             $data['featured_image'] = $request->file('featured_image')->store('articles','public');
+        } elseif ($request->input('clear_featured_image') == '1' && $article->featured_image) {
+            Storage::disk('public')->delete($article->featured_image);
+            $data['featured_image'] = null;
         }
 
         // If admin is saving → can set status directly

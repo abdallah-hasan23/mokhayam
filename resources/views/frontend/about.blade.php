@@ -39,7 +39,10 @@
   <div class="submit-cta">
     <h2>{{ $about['cta_title'] }}</h2>
     <p>{{ $about['cta_text'] }}</p>
-    <a href="mailto:{{ $about['cta_email'] }}" class="btn-white">أرسل مقالك الآن ←</a>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:4px">
+      <a href="{{ route('submit-story') }}" class="btn-white">أرسل قصتك ←</a>
+      <a href="mailto:{{ $about['cta_email'] }}" class="btn-white" style="background:transparent;border:2px solid rgba(255,255,255,.5);color:#fff">راسل التحرير ←</a>
+    </div>
   </div>
 </div>
 @endsection

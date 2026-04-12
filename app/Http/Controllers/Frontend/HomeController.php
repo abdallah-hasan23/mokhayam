@@ -19,11 +19,13 @@ class HomeController extends Controller {
         $totalArticles   = Article::published()->count();
         $totalWriters    = User::where('is_active', true)->count();
         $totalCategories = Category::count();
+        $ctaTitle        = Setting::get('about_cta_title') ?: 'أرسل قصتك';
+        $ctaText         = Setting::get('about_cta_text')  ?: 'هل لديك قصة تستحق أن تُروى؟ باب مخيّم مفتوح لكل من عاش لحظة تستحق الشهادة.';
 
         return view('frontend.home', compact(
             'heroArticles','latestArticles','longRead','featuredArticles','featuredCat',
             'categories','mostRead','heroTitle','heroSubtitle',
-            'totalArticles','totalWriters','totalCategories'
+            'totalArticles','totalWriters','totalCategories','ctaTitle','ctaText'
         ));
     }
 }

@@ -144,8 +144,8 @@
   </div>
   <div class="submit-cta-card">
     <div class="submit-cta-label">شهادات القراء</div>
-    <h2>قصتك تستحق أن تُروى</h2>
-    <p>هل عشت لحظة إنسانية تريد مشاركتها؟ أرسل قصتك وقد تظهر على صفحتنا الرئيسية.</p>
+    <h2>{{ $ctaTitle }}</h2>
+    <p>{{ $ctaText }}</p>
     <a href="{{ route('submit-story') }}" class="btn-white">أرسل قصتك الآن ←</a>
   </div>
 </div>

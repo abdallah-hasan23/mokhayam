@@ -18,7 +18,7 @@ class PageController extends Controller {
                 ['title' => \App\Models\Setting::get('value_4_title') ?: 'الاستقلالية',         'text' => \App\Models\Setting::get('value_4_text') ?: 'لا أجندات سياسية. صوتنا للإنسان وحده.'],
             ],
         ];
-        $team = \App\Models\User::where('is_active', true)->orderBy('role')->get();
+        $team = \App\Models\User::where('is_active', true)->where('show_name', true)->orderBy('role')->get();
         return view('frontend.about', compact('about', 'team'));
     }
 }
