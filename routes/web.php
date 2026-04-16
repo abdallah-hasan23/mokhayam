@@ -74,6 +74,8 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth','active'])->g
     // Submissions (reader stories) — admin only
     Route::middleware('role:admin')->group(function() {
         Route::get('/submissions',                          [\App\Http\Controllers\Dashboard\SubmissionController::class,'index'])->name('submissions.index');
+        // معاينة القصة كاملةً بتصميم الواجهة الأمامية
+        Route::get('/submissions/{submission}/preview',     [\App\Http\Controllers\Dashboard\SubmissionController::class,'preview'])->name('submissions.preview');
         Route::patch('/submissions/{submission}/approve',   [\App\Http\Controllers\Dashboard\SubmissionController::class,'approve'])->name('submissions.approve');
         Route::patch('/submissions/{submission}/reject',    [\App\Http\Controllers\Dashboard\SubmissionController::class,'reject'])->name('submissions.reject');
         Route::patch('/submissions/{submission}/toggle-home',[\App\Http\Controllers\Dashboard\SubmissionController::class,'toggleHome'])->name('submissions.toggleHome');

@@ -14,4 +14,7 @@ class Category extends Model {
     public function articles()          { return $this->hasMany(Article::class); }
     public function publishedArticles() { return $this->hasMany(Article::class)->where('status','published'); }
     public function getTotalViewsAttribute():int { return $this->articles()->sum('views'); }
+
+    /** التصنيفات المرئية فقط (show_in_nav = true) */
+    public function scopeVisible($query) { return $query->where('show_in_nav', true); }
 }

@@ -5,13 +5,46 @@ use App\Models\{Article,Category,User,Setting,Issue};
 
 class HomeController extends Controller {
     public function index() {
-        $heroArticles    = Article::with(['user','category'])->published()->latest('published_at')->limit(5)->get();
-        $latestArticles  = Article::with(['user','category'])->published()->latest('published_at')->skip(5)->limit(6)->get();
-        $longRead        = Article::with(['user','category'])->published()->orderByDesc('views')->skip(2)->first();
-        $featuredCat     = Category::orderBy('order')->skip(1)->first();
-        $featuredArticles= $featuredCat ? Article::with(['user','category'])->published()->where('category_id',$featuredCat->id)->latest('published_at')->limit(3)->get() : collect();
-        $categories      = Category::withCount('publishedArticles')->orderBy('order')->get();
-        $mostRead        = Article::with(['user','category'])->published()->orderByDesc('views')->limit(5)->get();
+        // Hero section — مقالات من التصنيفات المرئية فقط (show_in_nav = true)
+        $heroArticles    = Article::with(['user','category'])
+                            ->published()
+                            ->whereHas('category', fn($q) => $q->where('show_in_nav', true))
+                            ->latest('published_at')
+                            ->limit(5)->get();
+
+        // أحدث المقالات — نفس الفلتر، مع تخطي أول 5 مقالات الظاهرة في الـ hero
+        $latestArticles  = Article::with(['user','category'])
+                            ->published()
+                            ->whereHas('category', fn($q) => $q->where('show_in_nav', true))
+                            ->latest('published_at')
+                            ->skip(5)->limit(6)->get();
+
+        // القراءة المعمّقة — من التصنيفات المرئية أيضاً
+        $longRead        = Article::with(['user','category'])
+                            ->published()
+                            ->whereHas('category', fn($q) => $q->where('show_in_nav', true))
+                            ->orderByDesc('views')
+                            ->skip(2)->first();
+
+        // التصنيف المميّز في الشريط الجانبي — من المرئية فقط
+        $featuredCat     = Category::visible()->orderBy('order')->skip(1)->first();
+        $featuredArticles= $featuredCat
+                            ? Article::with(['user','category'])
+                                ->published()
+                                ->where('category_id', $featuredCat->id)
+                                ->latest('published_at')
+                                ->limit(3)->get()
+                            : collect();
+
+        // سحابة التصنيفات في الـ sidebar — المرئية فقط
+        $categories      = Category::visible()->withCount('publishedArticles')->orderBy('order')->get();
+
+        // الأكثر قراءة — من التصنيفات المرئية
+        $mostRead        = Article::with(['user','category'])
+                            ->published()
+                            ->whereHas('category', fn($q) => $q->where('show_in_nav', true))
+                            ->orderByDesc('views')
+                            ->limit(5)->get();
 
         // Hero stats
         $heroTitle       = Setting::get('about_hero_title')    ?: 'نرى ما لا تراه الكاميرات';

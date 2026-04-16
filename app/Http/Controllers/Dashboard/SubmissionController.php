@@ -39,4 +39,12 @@ class SubmissionController extends Controller
         $submission->delete();
         return back()->with('success', 'تم حذف القصة.');
     }
+
+    /**
+     * معاينة القصة كاملةً بتصميم الواجهة — للمدير فقط، تعمل حتى للقصص غير الموافق عليها
+     */
+    public function preview(Submission $submission)
+    {
+        return view('dashboard.submissions.preview', compact('submission'));
+    }
 }

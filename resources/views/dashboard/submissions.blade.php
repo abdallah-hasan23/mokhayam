@@ -62,29 +62,56 @@
           {{ $s->created_at->format('Y/m/d') }}
         </td>
         <td>
-          <div class="action-btns">
+          <div class="tbl-actions">
+            {{-- معاينة القصة كاملةً في تبويب جديد --}}
+            <a href="{{ route('dashboard.submissions.preview', $s) }}"
+               target="_blank"
+               class="btn btn-sm btn-outline"
+               title="معاينة القصة كاملةً">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </a>
+
+            {{-- موافقة / رفض (للقصص المعلقة فقط) --}}
             @if($s->status === 'pending')
-              <form method="POST" action="{{ route('dashboard.submissions.approve', $s) }}" style="display:inline">
+              <form method="POST" action="{{ route('dashboard.submissions.approve', $s) }}" style="display:contents">
                 @csrf @method('PATCH')
-                <button class="btn-sm btn-publish" title="موافقة">✔ موافقة</button>
+                <button class="btn btn-sm btn-success" title="موافقة">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
               </form>
-              <form method="POST" action="{{ route('dashboard.submissions.reject', $s) }}" style="display:inline">
+              <form method="POST" action="{{ route('dashboard.submissions.reject', $s) }}" style="display:contents">
                 @csrf @method('PATCH')
-                <button class="btn-sm btn-reject" title="رفض">✘ رفض</button>
-              </form>
-            @endif
-            @if($s->status === 'approved')
-              <form method="POST" action="{{ route('dashboard.submissions.toggleHome', $s) }}" style="display:inline">
-                @csrf @method('PATCH')
-                <button class="btn-sm btn-versions" title="{{ $s->show_on_home ? 'إخفاء من الرئيسية' : 'إظهار في الرئيسية' }}">
-                  {{ $s->show_on_home ? '⊖ إخفاء' : '⊕ رئيسية' }}
+                <button class="btn btn-sm btn-danger" title="رفض">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
               </form>
             @endif
-            <form method="POST" action="{{ route('dashboard.submissions.destroy', $s) }}" style="display:inline"
-              onsubmit="return confirm('حذف هذه القصة؟')">
+
+            {{-- إظهار/إخفاء من الرئيسية (للقصص الموافق عليها فقط) --}}
+            @if($s->status === 'approved')
+              <form method="POST" action="{{ route('dashboard.submissions.toggleHome', $s) }}" style="display:contents">
+                @csrf @method('PATCH')
+                <button class="btn btn-sm {{ $s->show_on_home ? 'btn-outline' : 'btn-gold' }}"
+                        title="{{ $s->show_on_home ? 'إخفاء من الرئيسية' : 'إظهار في الرئيسية' }}">
+                  @if($s->show_on_home)
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                  @else
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  @endif
+                </button>
+              </form>
+            @endif
+
+            {{-- حذف --}}
+            <form method="POST" action="{{ route('dashboard.submissions.destroy', $s) }}" style="display:contents"
+                  onsubmit="return confirm('حذف هذه القصة نهائياً؟')">
               @csrf @method('DELETE')
-              <button class="btn-sm btn-delete" title="حذف">🗑</button>
+              <button class="btn btn-sm btn-danger" title="حذف">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+              </button>
             </form>
           </div>
         </td>
