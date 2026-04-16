@@ -48,4 +48,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }, { rootMargin: '200px' }).observe(img);
         });
     }
+
+    /* PDF Download — no page navigation */
+    document.querySelectorAll('.js-pdf-dl').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const url = this.href;
+            const filename = this.dataset.filename || 'issue.pdf';
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () { document.body.removeChild(a); }, 200);
+        });
+    });
 });

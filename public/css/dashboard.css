@@ -190,6 +190,13 @@ ul{list-style:none}
 .btn-gold{background:var(--gold);color:#fff;box-shadow:0 2px 8px rgba(38,101,141,.3)}.btn-gold:hover{background:var(--gold-d);box-shadow:0 4px 14px rgba(38,101,141,.4);transform:translateY(-1px)}
 .btn-outline{background:var(--surface);color:var(--ink);border:1px solid var(--border)}.btn-outline:hover{border-color:var(--gold-bdr);color:var(--gold);background:var(--gold-bg)}
 .btn-ghost{background:transparent;color:var(--muted);padding:9px 12px}.btn-ghost:hover{color:var(--ink);background:var(--bg)}
+/* أزرار الإجراءات في الجداول — form بـ display:contents يجعل الأزرار flex-items مباشرة */
+.tbl-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;   /* منع الأزرار من النزول لسطر ثانٍ */
+}
 .btn-danger{background:var(--red-bg);color:var(--red);border:1px solid rgba(176,42,42,.2)}.btn-danger:hover{background:var(--red);color:#fff}
 .btn-success{background:var(--green-bg);color:var(--green);border:1px solid rgba(30,126,74,.2)}.btn-success:hover{background:var(--green);color:#fff}
 .btn-ink{background:var(--ink);color:#fff;box-shadow:0 2px 8px rgba(15,25,35,.2)}.btn-ink:hover{background:var(--ink2);transform:translateY(-1px)}
@@ -778,5 +785,40 @@ nav[role=navigation] span[aria-current=page] span{background:var(--gold);color:#
 .logo-preview-box img { width: 100%; height: 100%; object-fit: contain; }
 .logo-preview-wide { width: 100px; background: var(--bg); }
 .logo-placeholder { font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 24px; font-weight: 700; color: var(--gold); }
+
+/* ── Cover image preview box (issues form) ── */
+.cover-preview-box {
+  width: 120px;
+  height: 160px;           /* نسبة 3:4 ثابتة */
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cover-preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* تملأ الإطار بغض النظر عن أبعاد الصورة */
+  display: block;
+}
+.cover-preview-placeholder {
+  width: 120px;
+  height: 160px;
+  border: 1.5px dashed var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--faint);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 11px;
+}
 
 /* (responsive handled in unified section above) */

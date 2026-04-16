@@ -152,6 +152,11 @@
           <label class="form-label">عدد المقالات في الصفحة</label>
           <input type="number" name="articles_per_page" class="form-control" value="{{ $settings['articles_per_page'] ?? 8 }}" min="1" max="50">
         </div>
+        <div class="form-group">
+          <label class="form-label">الناشر (publisher)</label>
+          <input name="site_publisher" class="form-control" value="{{ $settings['site_publisher'] ?? '' }}" placeholder="مثال: مؤسسة مخيّم للإعلام">
+          <p class="settings-hint" style="margin-top:4px">يظهر في صفحة الأعداد الصادرة وأسفل الموقع</p>
+        </div>
         <div class="form-group" style="margin-bottom:0">
           <label class="form-label">نص الفوتر (f-about)</label>
           <textarea name="footer_about" class="form-control" rows="2" placeholder="منصة صحفية عربية مستقلة...">{{ $settings['footer_about'] ?? '' }}</textarea>

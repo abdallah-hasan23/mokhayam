@@ -112,6 +112,47 @@
 </div>
 @endif
 
+{{-- LATEST ISSUE --}}
+@if($latestIssue)
+<div class="home-issue-strip mt-52">
+  <div class="home-issue-cover">
+    @if($latestIssue->cover_image_url)
+      <img src="{{ $latestIssue->cover_image_url }}" alt="{{ $latestIssue->title }}">
+    @else
+      <div class="home-issue-cover-placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+    @endif
+  </div>
+  <div class="home-issue-info">
+    <div class="home-issue-eyebrow">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      أحدث إصدار &nbsp;·&nbsp; العدد {{ $latestIssue->issue_number }}
+    </div>
+    <h2 class="home-issue-title">{{ $latestIssue->title }}</h2>
+    @if($latestIssue->description)
+      <p class="home-issue-desc">{{ Str::limit($latestIssue->description, 140) }}</p>
+    @endif
+    <div class="home-issue-date">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      {{ \App\Models\Article::toArabicDate($latestIssue->published_at) }}
+    </div>
+    <div class="home-issue-btns">
+      <a href="{{ route('issues.show', $latestIssue) }}" class="home-issue-btn-read">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        اقرأ العدد
+      </a>
+      <a href="{{ route('issues.downloadPage', $latestIssue) }}"
+         class="home-issue-btn-dl">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        تحميل PDF
+      </a>
+      <a href="{{ route('issues.index') }}" class="home-issue-all">كل الأعداد ←</a>
+    </div>
+  </div>
+</div>
+@endif
+
 {{-- READER STORIES + CTA --}}
 @php
   $readerStories = \App\Models\Submission::forHome()->latest()->limit(3)->get();

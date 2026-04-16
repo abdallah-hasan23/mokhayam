@@ -1,7 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Frontend\{HomeController, ArticleController, CategoryController, SearchController, PageController, SubmitStoryController};
+use App\Http\Controllers\Frontend\{HomeController, ArticleController, CategoryController, SearchController, PageController, SubmitStoryController, IssueController as FrontendIssue};
 use App\Http\Controllers\Frontend\ContactController as FrontendContact;
 use App\Http\Controllers\Dashboard\{
     HomeController as DashHome,
@@ -13,6 +13,7 @@ use App\Http\Controllers\Dashboard\{
     SettingsController,
     NotificationController,
     ProfileController,
+    IssueController as DashIssue,
 };
 
 // ── Frontend ──────────────────────────────────────────────────
@@ -25,6 +26,12 @@ Route::get('/contact',         [FrontendContact::class,'index'])->name('contact'
 Route::post('/contact',        [FrontendContact::class,'store'])->name('contact.store');
 Route::get('/submit-story',    [SubmitStoryController::class,'show'])->name('submit-story');
 Route::post('/submit-story',   [SubmitStoryController::class,'store'])->name('submit-story.store');
+
+// الأعداد الصادرة
+Route::get('/issues',                          [FrontendIssue::class,'index'])->name('issues.index');
+Route::get('/issues/{issue}',                  [FrontendIssue::class,'show'])->name('issues.show');
+Route::get('/issues/{issue}/download',         [FrontendIssue::class,'download'])->name('issues.download');
+Route::get('/issues/{issue}/downloading',      [FrontendIssue::class,'downloadPage'])->name('issues.downloadPage');
 
 // ── Auth ──────────────────────────────────────────────────────
 Route::middleware('guest')->group(function() {
@@ -87,6 +94,17 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth','active'])->g
         Route::post('/categories',             [DashCategory::class,'store'])->name('categories.store');
         Route::patch('/categories/{category}', [DashCategory::class,'update'])->name('categories.update');
         Route::delete('/categories/{category}',[DashCategory::class,'destroy'])->name('categories.destroy');
+    });
+
+    // Issues — الأعداد الصادرة (admin only)
+    Route::middleware('role:admin')->group(function() {
+        Route::get('/issues',                        [DashIssue::class,'index'])->name('issues.index');
+        Route::get('/issues/create',                 [DashIssue::class,'create'])->name('issues.create');
+        Route::post('/issues',                       [DashIssue::class,'store'])->name('issues.store');
+        Route::get('/issues/{issue}/edit',           [DashIssue::class,'edit'])->name('issues.edit');
+        Route::patch('/issues/{issue}',              [DashIssue::class,'update'])->name('issues.update');
+        Route::delete('/issues/{issue}',             [DashIssue::class,'destroy'])->name('issues.destroy');
+        Route::patch('/issues/{issue}/toggle',       [DashIssue::class,'togglePublish'])->name('issues.toggle');
     });
 
     // Settings (admin only)

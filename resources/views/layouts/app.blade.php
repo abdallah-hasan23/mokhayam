@@ -100,6 +100,7 @@
                         </a>
                     </li>
                     @endforeach
+                    <li><a href="{{ route('issues.index') }}" class="{{ request()->routeIs('issues*') ? 'active' : '' }}">الأعداد الصادرة</a></li>
                     <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">عن مخيّم</a></li>
                     {{-- contact nav item removed --}}
                 </ul>
@@ -121,18 +122,6 @@
 <main>
     @yield('content')
 </main>
-
-{{-- PRE-FOOTER CTA --}}
-<div class="prefooter-cta">
-  <div class="prefooter-inner">
-    <h2>انضم إلى مجتمع مخيّم</h2>
-    <p>كن جزءاً من منصة تؤمن بأن القصة الإنسانية تستحق أن تُروى بأمانة وشجاعة</p>
-    <div class="prefooter-btns">
-      <a href="{{ route('contact') }}" class="btn-prefooter-outline">أرسل مقالك</a>
-      <a href="{{ route('search') }}" class="btn-prefooter-white">ابدأ القراءة الآن ←</a>
-    </div>
-  </div>
-</div>
 
 {{-- FOOTER --}}
 <footer class="site-footer">

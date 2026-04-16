@@ -146,9 +146,16 @@ class ArticleController extends Controller
             'category_id' => 'required|exists:categories,id',
             'excerpt'     => 'nullable|string|max:1000',
             'featured_image' => 'nullable|image|max:3072',
+            // تحقق من أن الكاتب المختار موجود فعلاً في جدول المستخدمين
+            'user_id'     => 'nullable|exists:users,id',
         ]);
 
         $data = $request->only(['title','content','category_id','excerpt','meta_title','meta_description']);
+
+        // السماح للمدير فقط بتغيير الكاتب — كان مفقوداً هنا وهو سبب المشكلة
+        if ($user->isAdmin() && $request->filled('user_id')) {
+            $data['user_id'] = $request->user_id;
+        }
 
         if ($request->hasFile('featured_image')) {
             if ($article->featured_image) Storage::disk('public')->delete($article->featured_image);

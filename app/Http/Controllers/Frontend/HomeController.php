@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
-use App\Models\{Article,Category,User,Setting};
+use App\Models\{Article,Category,User,Setting,Issue};
 
 class HomeController extends Controller {
     public function index() {
@@ -21,11 +21,13 @@ class HomeController extends Controller {
         $totalCategories = Category::count();
         $ctaTitle        = Setting::get('about_cta_title') ?: 'أرسل قصتك';
         $ctaText         = Setting::get('about_cta_text')  ?: 'هل لديك قصة تستحق أن تُروى؟ باب مخيّم مفتوح لكل من عاش لحظة تستحق الشهادة.';
+        $latestIssue     = Issue::published()->orderByDesc('issue_number')->first();
 
         return view('frontend.home', compact(
             'heroArticles','latestArticles','longRead','featuredArticles','featuredCat',
             'categories','mostRead','heroTitle','heroSubtitle',
-            'totalArticles','totalWriters','totalCategories','ctaTitle','ctaText'
+            'totalArticles','totalWriters','totalCategories','ctaTitle','ctaText',
+            'latestIssue'
         ));
     }
 }

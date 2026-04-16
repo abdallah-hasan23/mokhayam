@@ -31,7 +31,7 @@ class SettingsController extends Controller
             'favicon_file'      => 'nullable|image|max:512|mimes:png,jpg,jpeg,ico,svg',
         ]);
 
-        $keys = ['site_name','site_tagline','site_email','articles_per_page','telegram','twitter','instagram','tiktok','facebook',
+        $keys = ['site_name','site_tagline','site_email','site_publisher','articles_per_page','telegram','twitter','instagram','tiktok','facebook',
                  'about_hero_title','about_hero_subtitle','about_who_text','about_cta_title','about_cta_text','about_cta_email',
                  'value_1_title','value_1_text','value_2_title','value_2_text',
                  'value_3_title','value_3_text','value_4_title','value_4_text',
