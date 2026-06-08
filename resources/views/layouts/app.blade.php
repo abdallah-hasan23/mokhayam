@@ -13,6 +13,8 @@
 <link rel="icon" href="{{ asset('storage/'.$faviconPath) }}">
 <link rel="shortcut icon" href="{{ asset('storage/'.$faviconPath) }}">
 @endif
+@stack('styles')
+
 </head>
 <body>
 

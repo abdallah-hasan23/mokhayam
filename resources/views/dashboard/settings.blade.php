@@ -233,10 +233,6 @@
           <label class="form-label">العنوان الرئيسي</label>
           <input name="about_hero_title" class="form-control" value="{{ $settings['about_hero_title'] ?? 'نرى ما لا تراه الكاميرات' }}" placeholder="نرى ما لا تراه الكاميرات">
         </div>
-        <div class="form-group">
-          <label class="form-label">النص التعريفي (تحت العنوان فقط)</label>
-          <input name="about_hero_subtitle" class="form-control" value="{{ $settings['about_hero_subtitle'] ?? '' }}" placeholder="مخيّم منصة صحفية عربية مستقلة...">
-        </div>
         <div class="form-group" style="margin-bottom:0">
           <label class="form-label">نص "من نحن"</label>
           <textarea name="about_who_text" class="form-control" rows="5" placeholder="اكتب هنا...">{{ $settings['about_who_text'] ?? '' }}</textarea>
@@ -260,26 +256,6 @@
       </div>
 
     </div>
-
-    {{-- الصف الثاني: قيمنا (4 بطاقات بعرض كامل) --}}
-    <div style="border-top:1px solid var(--border);padding-top:18px">
-      <p class="form-label" style="font-weight:700;margin-bottom:14px">قيمنا — 4 بطاقات</p>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
-        @foreach([1,2,3,4] as $i)
-        <div style="border:1px solid var(--border);border-radius:6px;padding:12px">
-          <div class="form-group">
-            <label class="form-label">القيمة {{ $i }} — العنوان</label>
-            <input name="value_{{ $i }}_title" class="form-control" value="{{ $settings['value_'.$i.'_title'] ?? '' }}" placeholder="عنوان القيمة">
-          </div>
-          <div class="form-group" style="margin-bottom:0">
-            <label class="form-label">القيمة {{ $i }} — النص</label>
-            <input name="value_{{ $i }}_text" class="form-control" value="{{ $settings['value_'.$i.'_text'] ?? '' }}" placeholder="وصف مختصر">
-          </div>
-        </div>
-        @endforeach
-      </div>
-    </div>
-
   </div>
 </div>
 

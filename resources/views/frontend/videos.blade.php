@@ -2,7 +2,7 @@
 @section('title','فيديوهات')
 @section('content')
 <div class="about-hero">
-  <span class="badge" style="margin-bottom:20px;display:inline-block">قناة يوتيوب</span>
+  <div class="cat-hero-label">قناة يوتيوب</div>
   <h1>فيديوهات مخيّم</h1>
   <p>شاهد أحدث الفيديوهات التي نشاركها على قناة مخيّم مباشرة داخل الموقع.</p>
 </div>

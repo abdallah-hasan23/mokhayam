@@ -5,14 +5,14 @@
   'use strict';
 
   // ── إخفاء فوري ──────────────────────────────────────────────
-  gsap.set('.about-hero h1', { y: 40, opacity: 0 });
-  gsap.set('.about-hero p, .about-hero .badge', { opacity: 0 });
+  gsap.set('.about-hero h1', { y: 32, opacity: 0 });
+  gsap.set('.about-hero p, .about-hero .cat-hero-label', { opacity: 0 });
 
   requestAnimationFrame(function () {
 
     // ① About Hero
     var heroTl = gsap.timeline({ delay: 0.15 });
-    heroTl.to('.about-hero .badge', { opacity: 1, duration: 0.42, ease: 'power2.out' });
+    heroTl.to('.about-hero .cat-hero-label', { opacity: 1, duration: 0.42, ease: 'power2.out' });
     heroTl.to('.about-hero h1',     { y: 0, opacity: 1, duration: 0.85, ease: 'power3.out' }, '-=0.22');
     heroTl.to('.about-hero p',      { opacity: 1, duration: 0.62, ease: 'power2.out' }, '-=0.38');
 
