@@ -101,6 +101,7 @@
                     </li>
                     @endforeach
                     <li><a href="{{ route('issues.index') }}" class="{{ request()->routeIs('issues*') ? 'active' : '' }}">الأعداد الصادرة</a></li>
+                    <li><a href="{{ route('videos.index') }}" class="{{ request()->routeIs('videos.*') ? 'active' : '' }}">فيديوهات</a></li>
                     <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">عن مخيّم</a></li>
                     {{-- contact nav item removed --}}
                 </ul>

@@ -1,8 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Frontend\{HomeController, ArticleController, CategoryController, SearchController, PageController, SubmitStoryController, IssueController as FrontendIssue};
-use App\Http\Controllers\Frontend\ContactController as FrontendContact;
+use App\Http\Controllers\Frontend\{HomeController, ArticleController, CategoryController, SearchController, PageController, SubmitStoryController, ContactController as FrontendContact, VideoController, IssueController as FrontendIssue};
 use App\Http\Controllers\Dashboard\{
     HomeController as DashHome,
     ArticleController as DashArticle,
@@ -14,6 +13,7 @@ use App\Http\Controllers\Dashboard\{
     NotificationController,
     ProfileController,
     IssueController as DashIssue,
+    VideoController as DashVideo,
 };
 
 // ── Frontend ──────────────────────────────────────────────────
@@ -26,6 +26,7 @@ Route::get('/contact',         [FrontendContact::class,'index'])->name('contact'
 Route::post('/contact',        [FrontendContact::class,'store'])->name('contact.store');
 Route::get('/submit-story',    [SubmitStoryController::class,'show'])->name('submit-story');
 Route::post('/submit-story',   [SubmitStoryController::class,'store'])->name('submit-story.store');
+Route::get('/videos',          [VideoController::class,'index'])->name('videos.index');
 
 // الأعداد الصادرة
 Route::get('/issues',                          [FrontendIssue::class,'index'])->name('issues.index');
@@ -107,6 +108,16 @@ Route::prefix('dashboard')->name('dashboard.')->middleware(['auth','active'])->g
         Route::patch('/issues/{issue}',              [DashIssue::class,'update'])->name('issues.update');
         Route::delete('/issues/{issue}',             [DashIssue::class,'destroy'])->name('issues.destroy');
         Route::patch('/issues/{issue}/toggle',       [DashIssue::class,'togglePublish'])->name('issues.toggle');
+    });
+
+    // Videos (admin/editor)
+    Route::middleware('role:admin,editor')->group(function() {
+        Route::get('/videos', [DashVideo::class,'index'])->name('videos.index');
+        Route::get('/videos/create', [DashVideo::class,'create'])->name('videos.create');
+        Route::post('/videos', [DashVideo::class,'store'])->name('videos.store');
+        Route::get('/videos/{video}/edit', [DashVideo::class,'edit'])->name('videos.edit');
+        Route::patch('/videos/{video}', [DashVideo::class,'update'])->name('videos.update');
+        Route::delete('/videos/{video}', [DashVideo::class,'destroy'])->name('videos.destroy');
     });
 
     // Settings (admin only)

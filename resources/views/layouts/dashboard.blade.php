@@ -23,6 +23,7 @@
   $unreadContact     = \App\Models\ContactMessage::where('is_read',false)->count();
   $unreadNotif       = auth()->user()->unreadNotifications->count();
   $recentNotifs      = auth()->user()->notifications()->latest()->limit(6)->get();
+  $videoCount        = \App\Models\Video::count();
   $logoPath          = \App\Models\Setting::get('logo_path');
   $logoSubPath       = \App\Models\Setting::get('logo_sub');
   $arabicDate        = \App\Models\Article::toArabicDate(now());
@@ -93,6 +94,16 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
         </span>
         <span class="sb-label">الأعداد الصادرة</span>
+      </a>
+      @endif
+
+      @if(auth()->user()->isAdmin() || auth()->user()->isEditor())
+      <a href="{{ route('dashboard.videos.index') }}" class="sb-link {{ request()->routeIs('dashboard.videos.*') ? 'active' : '' }}">
+        <span class="sb-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/><rect x="2" y="2" width="20" height="20" rx="4"/></svg>
+        </span>
+        <span class="sb-label">فيديوهات اليوتيوب</span>
+        @if($videoCount > 0)<span class="sb-badge">{{ $videoCount }}</span>@endif
       </a>
       @endif
 
